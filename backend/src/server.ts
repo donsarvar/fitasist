@@ -10,39 +10,16 @@ dotenv.config();
 
 const app = express();
 
-// Security and compression middleware
-app.use(helmet());
+// Security and compression middleware (allow cross-origin for SPA)
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(compression());
 
-// CORS configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(",") 
-  : [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:3000",
-      "https://fitasist-428cc.web.app",
-      "https://fitasist-428cc.firebaseapp.com"
-    ];
-
+// CORS configuration allowing all authorized domains
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, or dev/emulator)
-    if (!origin) return callback(null, true);
-    
-    // Check if it is a Capacitor local origin or our deployed Web domain
-    const isAllowed = origin.startsWith("http://localhost") || 
-                      origin.startsWith("https://localhost") || 
-                      origin.startsWith("capacitor://") ||
-                      origin.includes("fitasist-428cc.web.app") ||
-                      origin.includes("fitasist-428cc.firebaseapp.com") ||
-                      allowedOrigins.indexOf(origin) !== -1;
-                      
-    if (isAllowed || process.env.NODE_ENV !== "production") {
-      return callback(null, true);
-    }
-    return callback(null, true); // Fallback: allow all origins to prevent CORS breakage
-  }
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "x-gemini-key"]
 }));
 
 // Body parsing middleware
