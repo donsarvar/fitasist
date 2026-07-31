@@ -15,12 +15,11 @@ async function callGeminiDirect(
   signal?: AbortSignal
 ): Promise<string> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-  const timeoutSignal = AbortSignal.timeout(15000);
-  const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+  const fetchSignal = signal || AbortSignal.timeout(25000);
 
   const response = await fetch(url, {
     method: "POST",
-    signal: combinedSignal,
+    signal: fetchSignal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -36,7 +35,7 @@ async function callGeminiDirect(
 
   const data = await response.json();
   const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!replyText) throw new Error("AI javobidan bo'sh ma'lumot qaytdi.");
+  if (!replyText) throw new Error("Gemini API bo'sh javob qaytardi.");
   return replyText.trim();
 }
 
