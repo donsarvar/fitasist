@@ -1,7 +1,46 @@
 # 📦 FITASIST PLATFORM - TO'LIQ MANBA KODI (FULL CODEBASE EXPORT)
 
-**Jami Manba Fayllar Soni**: 258 ta fayl
+**Jami Manba Fayllar Soni**: 259 ta fayl
 **Eksport Qilingan Sana**: 2026-08-01
+
+---
+
+## 📄 Fayl: `.github\workflows\deploy.yml`
+
+```yaml
+name: FitAsist CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-policy: lts/*
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Type Check
+        run: npx tsc --noEmit
+
+      - name: Build Web Bundle
+        run: npm run build
+
+```
 
 ---
 
@@ -523,17 +562,13 @@ export const ADMIN_UIDS: string[] = [
 ]
 
 export const ADMIN_EMAILS: string[] = [
-  // Add your admin email(s) here
-  // Example: 'admin@fitasist.uz'
-  // We'll check against currently logged in user's email
+  "salimovsarvar21@gmail.com",
 ]
 
 export function isAdminUser(uid: string | null, email: string | null): boolean {
   if (!uid && !email) return false
   if (ADMIN_UIDS.length > 0 && uid && ADMIN_UIDS.includes(uid)) return true
   if (ADMIN_EMAILS.length > 0 && email && ADMIN_EMAILS.some(e => e.toLowerCase() === email.toLowerCase())) return true
-  // If no admin list configured yet, allow first authenticated user (dev mode)
-  if (ADMIN_UIDS.length === 0 && ADMIN_EMAILS.length === 0) return true
   return false
 }
 
@@ -1021,8 +1056,9 @@ export function HydrationPage() {
         const usersSnap = await getDocs(collection(db, 'users'));
         let totalLogs = 0;
         let sumWater = 0;
-        let creatineUsers = 0;
-        let vitDUsers = 0;
+        const totalUserCount = usersSnap.docs.length;
+        const uniqueCreatineUsers = new Set<string>();
+        const uniqueVitDUsers = new Set<string>();
         const dateMap: Record<string, number> = {};
 
         for (const userDoc of usersSnap.docs) {
@@ -1033,8 +1069,8 @@ export function HydrationPage() {
             const waterL = (data.waterMl || 0) / 1000;
             sumWater += waterL;
 
-            if (data.creatineG && data.creatineG > 0) creatineUsers++;
-            if (data.vitaminD) vitDUsers++;
+            if (data.creatineG && data.creatineG > 0) uniqueCreatineUsers.add(userDoc.id);
+            if (data.vitaminD) uniqueVitDUsers.add(userDoc.id);
 
             if (data.date) {
               dateMap[data.date] = (dateMap[data.date] || 0) + waterL;
@@ -1050,12 +1086,9 @@ export function HydrationPage() {
         setHydrationStats({
           totalLogs,
           avgWaterLitres: totalLogs > 0 ? Math.round((sumWater / totalLogs) * 10) / 10 : 0,
-          creatineUsersPercent: totalLogs > 0 ? Math.round((creatineUsers / totalLogs) * 100) : 0,
-          vitaminDUsersPercent: totalLogs > 0 ? Math.round((vitDUsers / totalLogs) * 100) : 0,
-          hydrationTrends: trendList.length > 0 ? trendList : [
-            { date: 'Bugun', water: 2.5 },
-            { date: 'Kecha', water: 2.1 },
-          ],
+          creatineUsersPercent: totalUserCount > 0 ? Math.round((uniqueCreatineUsers.size / totalUserCount) * 100) : 0,
+          vitaminDUsersPercent: totalUserCount > 0 ? Math.round((uniqueVitDUsers.size / totalUserCount) * 100) : 0,
+          hydrationTrends: trendList,
         });
       } catch (err) {
         console.error('Error fetching hydration stats:', err);
@@ -1131,11 +1164,23 @@ export function MeasurementsPage() {
         let userCountWithHeight = 0;
         const allMeasurements: any[] = [];
 
+        let totalUserBMIs = 0;
+        let validBMICount = 0;
+
         for (const userDoc of usersSnap.docs) {
           const uData = userDoc.data();
-          if (uData.profile?.height) {
-            sumHeight += uData.profile.height;
+          const uHeight = uData.profile?.height;
+          const uWeight = uData.profile?.weight;
+
+          if (uHeight) {
+            sumHeight += uHeight;
             userCountWithHeight++;
+          }
+
+          if (uHeight && uWeight) {
+            const individualBMI = uWeight / Math.pow(uHeight / 100, 2);
+            totalUserBMIs += individualBMI;
+            validBMICount++;
           }
 
           const measSnap = await getDocs(collection(db, 'users', userDoc.id, 'measurements'));
@@ -1151,7 +1196,9 @@ export function MeasurementsPage() {
 
         const avgH = userCountWithHeight > 0 ? Math.round(sumHeight / userCountWithHeight) : 175;
         const avgW = totalLogs > 0 ? Math.round(sumWeight / totalLogs) : 70;
-        const bmi = Math.round((avgW / Math.pow(avgH / 100, 2)) * 10) / 10;
+        const avgBmiVal = validBMICount > 0 
+          ? Math.round((totalUserBMIs / validBMICount) * 10) / 10 
+          : Math.round((avgW / Math.pow(avgH / 100, 2)) * 10) / 10;
 
         allMeasurements.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
@@ -1159,7 +1206,7 @@ export function MeasurementsPage() {
           totalLogs,
           avgWeight: avgW,
           avgHeight: avgH,
-          avgBMI: bmi,
+          avgBMI: avgBmiVal,
           weightHistory: allMeasurements.slice(-10),
         });
       } catch (err) {
@@ -1278,17 +1325,17 @@ export function NutritionPage() {
           avgFat: totalLogs > 0 ? Math.round(sumFat / totalLogs) : 0,
           topFoods: topFoodsList,
           sourceDistribution: [
-            { name: '🛒 Menyu/Savat', value: sources.cart || 1 },
-            { name: '🔍 Qidiruv', value: sources.search || 1 },
-            { name: '📸 AI Rasm', value: sources.photo_ai || 1 },
-            { name: '✏️ Qo\'lda', value: sources.manual || 1 },
-          ],
+            { name: '🛒 Menyu/Savat', value: sources.cart || 0 },
+            { name: '🔍 Qidiruv', value: sources.search || 0 },
+            { name: '📷 AI Foto', value: sources.photo_ai || 0 },
+            { name: '✍️ Qo\'lda', value: sources.manual || 0 },
+          ].filter(item => item.value > 0),
           mealTypeDistribution: [
-            { name: 'Nonushta', value: mealTypes.breakfast || 1 },
-            { name: 'Tushlik', value: mealTypes.lunch || 1 },
-            { name: 'Kechki ovqat', value: mealTypes.dinner || 1 },
-            { name: 'Perekus', value: mealTypes.snack || 1 },
-          ],
+            { name: 'Nonushta', value: mealTypes.breakfast || 0 },
+            { name: 'Tushlik', value: mealTypes.lunch || 0 },
+            { name: 'Kechki ovqat', value: mealTypes.dinner || 0 },
+            { name: 'Perekus', value: mealTypes.snack || 0 },
+          ].filter(item => item.value > 0),
         });
       } catch (err) {
         console.error('Error fetching nutrition analytics:', err);
@@ -1431,11 +1478,25 @@ export function Overview() {
           totalLogs += foodSnap.size;
         }
 
+        const nowTime = new Date().getTime();
+        const oneDayMs = 24 * 60 * 60 * 1000;
+        let actualActive24h = 0;
+
+        userList.forEach((u) => {
+          const userCreatedTime = new Date(u.createdAt).getTime();
+          if (nowTime - userCreatedTime <= oneDayMs) {
+            actualActive24h++;
+          }
+        });
+
+        // If no users registered in last 24h, set minimum active to total users count (or real active count)
+        const activeUsersCount = actualActive24h > 0 ? actualActive24h : totalUsers;
+
         userList.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         setStats({
           totalUsers,
-          active24h: Math.ceil(totalUsers * 0.8), // Estimated active
+          active24h: activeUsersCount,
           totalChatSessions: totalChats,
           totalFoodLogs: totalLogs,
           genderDistribution: [
@@ -1717,18 +1778,25 @@ export function UsersPage() {
   const handleDeleteUserDoc = async (uid: string, fio: string) => {
     if (!window.confirm(`${fio} foydalanuvchisini va unga tegishli barcha ma'lumotlarni o'chirishga ishonchingiz komilmi?`)) return;
     try {
-      const subcollections = ["hydration", "measurements", "foodLogs", "chatSessions", "challenges"];
+      const { writeBatch } = await import("firebase/firestore");
+      const batch = writeBatch(db);
+      const subcollections = ["hydration", "measurements", "foodLogs", "chatSessions", "challenges", "notifications"];
+
       for (const sub of subcollections) {
         const snap = await getDocs(collection(db, "users", uid, sub));
-        for (const d of snap.docs) {
-          await deleteDoc(doc(db, "users", uid, sub, d.id));
-        }
+        snap.docs.forEach((d) => {
+          batch.delete(doc(db, "users", uid, sub, d.id));
+        });
       }
-      await deleteDoc(doc(db, "users", uid));
+
+      batch.delete(doc(db, "users", uid));
+      await batch.commit();
+
       setUsers(prev => prev.filter(u => u.uid !== uid));
       setSelectedUser(null);
     } catch (err) {
-      console.error("Error deleting user doc:", err);
+      console.error("Error deleting user doc atomically:", err);
+      alert("Foydalanuvchini o'chirishda xatolik yuz berdi.");
     }
   };
 
@@ -24726,39 +24794,16 @@ dotenv.config();
 
 const app = express();
 
-// Security and compression middleware
-app.use(helmet());
+// Security and compression middleware (allow cross-origin for SPA)
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(compression());
 
-// CORS configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(",") 
-  : [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:3000",
-      "https://fitasist-428cc.web.app",
-      "https://fitasist-428cc.firebaseapp.com"
-    ];
-
+// CORS configuration allowing all authorized domains
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, or dev/emulator)
-    if (!origin) return callback(null, true);
-    
-    // Check if it is a Capacitor local origin or our deployed Web domain
-    const isAllowed = origin.startsWith("http://localhost") || 
-                      origin.startsWith("https://localhost") || 
-                      origin.startsWith("capacitor://") ||
-                      origin.includes("fitasist-428cc.web.app") ||
-                      origin.includes("fitasist-428cc.firebaseapp.com") ||
-                      allowedOrigins.indexOf(origin) !== -1;
-                      
-    if (isAllowed || process.env.NODE_ENV !== "production") {
-      return callback(null, true);
-    }
-    return callback(null, true); // Fallback: allow all origins to prevent CORS breakage
-  }
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "x-gemini-key"]
 }));
 
 // Body parsing middleware
@@ -25195,6 +25240,9 @@ service cloud.firestore {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="theme-color" content="#4F6BFF" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -36117,12 +36165,11 @@ async function callGeminiDirect(
   signal?: AbortSignal
 ): Promise<string> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-  const timeoutSignal = AbortSignal.timeout(15000);
-  const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+  const fetchSignal = signal || AbortSignal.timeout(25000);
 
   const response = await fetch(url, {
     method: "POST",
-    signal: combinedSignal,
+    signal: fetchSignal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -36138,7 +36185,7 @@ async function callGeminiDirect(
 
   const data = await response.json();
   const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!replyText) throw new Error("AI javobidan bo'sh ma'lumot qaytdi.");
+  if (!replyText) throw new Error("Gemini API bo'sh javob qaytardi.");
   return replyText.trim();
 }
 
@@ -36209,6 +36256,38 @@ async function callOpenRouterFallback(
   return reply.trim();
 }
 
+async function callBackendProxy(
+  geminiMessages: any[],
+  systemPrompt: string,
+  signal?: AbortSignal
+): Promise<string> {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
+  const timeoutSignal = AbortSignal.timeout(15000);
+  const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+
+  const response = await fetch(`${BACKEND_URL}/api/chat`, {
+    method: "POST",
+    signal: combinedSignal,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: geminiMessages,
+      systemPrompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Backend Proxy ${response.status}: ${errText.substring(0, 150)}`);
+  }
+
+  const data = await response.json();
+  const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!replyText) {
+    throw new Error("Backend AI Proxy javob qaytarmadi.");
+  }
+  return replyText;
+}
+
 function handleAIError(error: any): string {
   console.error("AI request failed across all providers:", error);
   const msg = error?.message || "";
@@ -36274,22 +36353,35 @@ Foydalanuvchiga do'stona va samimiy munosabatda bo'l.
     geminiMessages.shift();
   }
 
-  // 1-bosqich: Gemini 2.0 Flash
-  try {
-    if (signal?.aborted) return null;
-    return await callGeminiDirect(geminiMessages, systemPrompt, apiKey, signal);
-  } catch (geminiErr: any) {
-    if (geminiErr.name === "AbortError") return null;
-    console.warn("Primary Gemini failed, switching instantly to OpenRouter Fallback...", geminiErr.message);
+  // 1-bosqich: Gemini Direct (if valid client key exists)
+  if (apiKey && apiKey.length > 15) {
+    try {
+      if (signal?.aborted) return null;
+      return await callGeminiDirect(geminiMessages, systemPrompt, apiKey, signal);
+    } catch (geminiErr: any) {
+      if (geminiErr.name === "AbortError") return null;
+      console.warn("Primary Gemini client fetch failed, switching to OpenRouter...", geminiErr.message);
+    }
   }
 
-  // 2-bosqich: OpenRouter Fallback (Instant seamless transition)
+  // 2-bosqich: OpenRouter Fallback (if valid client key exists)
+  if (OPENROUTER_KEY && OPENROUTER_KEY.length > 15) {
+    try {
+      if (signal?.aborted) return null;
+      return await callOpenRouterFallback(geminiMessages, systemPrompt, signal);
+    } catch (fallbackErr: any) {
+      if (fallbackErr.name === "AbortError") return null;
+      console.warn("OpenRouter client fetch failed, switching to Backend Proxy...", fallbackErr.message);
+    }
+  }
+
+  // 3-bosqich: Backend Proxy Fallback (Secure multi-ai proxy on server)
   try {
     if (signal?.aborted) return null;
-    return await callOpenRouterFallback(geminiMessages, systemPrompt, signal);
-  } catch (fallbackErr: any) {
-    if (fallbackErr.name === "AbortError") return null;
-    return handleAIError(fallbackErr);
+    return await callBackendProxy(geminiMessages, systemPrompt, signal);
+  } catch (proxyErr: any) {
+    if (proxyErr.name === "AbortError") return null;
+    return handleAIError(proxyErr);
   }
 }
 

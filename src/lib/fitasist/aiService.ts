@@ -112,12 +112,11 @@ async function callBackendProxy(
   signal?: AbortSignal
 ): Promise<string> {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
-  const timeoutSignal = AbortSignal.timeout(15000);
-  const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+  const fetchSignal = signal || AbortSignal.timeout(25000);
 
   const response = await fetch(`${BACKEND_URL}/api/chat`, {
     method: "POST",
-    signal: combinedSignal,
+    signal: fetchSignal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       messages: geminiMessages,
