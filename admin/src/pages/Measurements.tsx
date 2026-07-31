@@ -25,11 +25,23 @@ export function MeasurementsPage() {
         let userCountWithHeight = 0;
         const allMeasurements: any[] = [];
 
+        let totalUserBMIs = 0;
+        let validBMICount = 0;
+
         for (const userDoc of usersSnap.docs) {
           const uData = userDoc.data();
-          if (uData.profile?.height) {
-            sumHeight += uData.profile.height;
+          const uHeight = uData.profile?.height;
+          const uWeight = uData.profile?.weight;
+
+          if (uHeight) {
+            sumHeight += uHeight;
             userCountWithHeight++;
+          }
+
+          if (uHeight && uWeight) {
+            const individualBMI = uWeight / Math.pow(uHeight / 100, 2);
+            totalUserBMIs += individualBMI;
+            validBMICount++;
           }
 
           const measSnap = await getDocs(collection(db, 'users', userDoc.id, 'measurements'));
@@ -45,7 +57,9 @@ export function MeasurementsPage() {
 
         const avgH = userCountWithHeight > 0 ? Math.round(sumHeight / userCountWithHeight) : 175;
         const avgW = totalLogs > 0 ? Math.round(sumWeight / totalLogs) : 70;
-        const bmi = Math.round((avgW / Math.pow(avgH / 100, 2)) * 10) / 10;
+        const avgBmiVal = validBMICount > 0 
+          ? Math.round((totalUserBMIs / validBMICount) * 10) / 10 
+          : Math.round((avgW / Math.pow(avgH / 100, 2)) * 10) / 10;
 
         allMeasurements.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
@@ -53,7 +67,7 @@ export function MeasurementsPage() {
           totalLogs,
           avgWeight: avgW,
           avgHeight: avgH,
-          avgBMI: bmi,
+          avgBMI: avgBmiVal,
           weightHistory: allMeasurements.slice(-10),
         });
       } catch (err) {

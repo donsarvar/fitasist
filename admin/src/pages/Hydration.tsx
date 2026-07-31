@@ -21,8 +21,9 @@ export function HydrationPage() {
         const usersSnap = await getDocs(collection(db, 'users'));
         let totalLogs = 0;
         let sumWater = 0;
-        let creatineUsers = 0;
-        let vitDUsers = 0;
+        const totalUserCount = usersSnap.docs.length;
+        const uniqueCreatineUsers = new Set<string>();
+        const uniqueVitDUsers = new Set<string>();
         const dateMap: Record<string, number> = {};
 
         for (const userDoc of usersSnap.docs) {
@@ -33,8 +34,8 @@ export function HydrationPage() {
             const waterL = (data.waterMl || 0) / 1000;
             sumWater += waterL;
 
-            if (data.creatineG && data.creatineG > 0) creatineUsers++;
-            if (data.vitaminD) vitDUsers++;
+            if (data.creatineG && data.creatineG > 0) uniqueCreatineUsers.add(userDoc.id);
+            if (data.vitaminD) uniqueVitDUsers.add(userDoc.id);
 
             if (data.date) {
               dateMap[data.date] = (dateMap[data.date] || 0) + waterL;
@@ -50,12 +51,9 @@ export function HydrationPage() {
         setHydrationStats({
           totalLogs,
           avgWaterLitres: totalLogs > 0 ? Math.round((sumWater / totalLogs) * 10) / 10 : 0,
-          creatineUsersPercent: totalLogs > 0 ? Math.round((creatineUsers / totalLogs) * 100) : 0,
-          vitaminDUsersPercent: totalLogs > 0 ? Math.round((vitDUsers / totalLogs) * 100) : 0,
-          hydrationTrends: trendList.length > 0 ? trendList : [
-            { date: 'Bugun', water: 2.5 },
-            { date: 'Kecha', water: 2.1 },
-          ],
+          creatineUsersPercent: totalUserCount > 0 ? Math.round((uniqueCreatineUsers.size / totalUserCount) * 100) : 0,
+          vitaminDUsersPercent: totalUserCount > 0 ? Math.round((uniqueVitDUsers.size / totalUserCount) * 100) : 0,
+          hydrationTrends: trendList,
         });
       } catch (err) {
         console.error('Error fetching hydration stats:', err);

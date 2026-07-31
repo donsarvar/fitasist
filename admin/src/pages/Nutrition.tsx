@@ -67,17 +67,17 @@ export function NutritionPage() {
           avgFat: totalLogs > 0 ? Math.round(sumFat / totalLogs) : 0,
           topFoods: topFoodsList,
           sourceDistribution: [
-            { name: '🛒 Menyu/Savat', value: sources.cart || 1 },
-            { name: '🔍 Qidiruv', value: sources.search || 1 },
-            { name: '📸 AI Rasm', value: sources.photo_ai || 1 },
-            { name: '✏️ Qo\'lda', value: sources.manual || 1 },
-          ],
+            { name: '🛒 Menyu/Savat', value: sources.cart || 0 },
+            { name: '🔍 Qidiruv', value: sources.search || 0 },
+            { name: '📷 AI Foto', value: sources.photo_ai || 0 },
+            { name: '✍️ Qo\'lda', value: sources.manual || 0 },
+          ].filter(item => item.value > 0),
           mealTypeDistribution: [
-            { name: 'Nonushta', value: mealTypes.breakfast || 1 },
-            { name: 'Tushlik', value: mealTypes.lunch || 1 },
-            { name: 'Kechki ovqat', value: mealTypes.dinner || 1 },
-            { name: 'Perekus', value: mealTypes.snack || 1 },
-          ],
+            { name: 'Nonushta', value: mealTypes.breakfast || 0 },
+            { name: 'Tushlik', value: mealTypes.lunch || 0 },
+            { name: 'Kechki ovqat', value: mealTypes.dinner || 0 },
+            { name: 'Perekus', value: mealTypes.snack || 0 },
+          ].filter(item => item.value > 0),
         });
       } catch (err) {
         console.error('Error fetching nutrition analytics:', err);

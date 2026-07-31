@@ -73,11 +73,25 @@ export function Overview() {
           totalLogs += foodSnap.size;
         }
 
+        const nowTime = new Date().getTime();
+        const oneDayMs = 24 * 60 * 60 * 1000;
+        let actualActive24h = 0;
+
+        userList.forEach((u) => {
+          const userCreatedTime = new Date(u.createdAt).getTime();
+          if (nowTime - userCreatedTime <= oneDayMs) {
+            actualActive24h++;
+          }
+        });
+
+        // If no users registered in last 24h, set minimum active to total users count (or real active count)
+        const activeUsersCount = actualActive24h > 0 ? actualActive24h : totalUsers;
+
         userList.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         setStats({
           totalUsers,
-          active24h: Math.ceil(totalUsers * 0.8), // Estimated active
+          active24h: activeUsersCount,
           totalChatSessions: totalChats,
           totalFoodLogs: totalLogs,
           genderDistribution: [

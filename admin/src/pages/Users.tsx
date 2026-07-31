@@ -114,18 +114,25 @@ export function UsersPage() {
   const handleDeleteUserDoc = async (uid: string, fio: string) => {
     if (!window.confirm(`${fio} foydalanuvchisini va unga tegishli barcha ma'lumotlarni o'chirishga ishonchingiz komilmi?`)) return;
     try {
-      const subcollections = ["hydration", "measurements", "foodLogs", "chatSessions", "challenges"];
+      const { writeBatch } = await import("firebase/firestore");
+      const batch = writeBatch(db);
+      const subcollections = ["hydration", "measurements", "foodLogs", "chatSessions", "challenges", "notifications"];
+
       for (const sub of subcollections) {
         const snap = await getDocs(collection(db, "users", uid, sub));
-        for (const d of snap.docs) {
-          await deleteDoc(doc(db, "users", uid, sub, d.id));
-        }
+        snap.docs.forEach((d) => {
+          batch.delete(doc(db, "users", uid, sub, d.id));
+        });
       }
-      await deleteDoc(doc(db, "users", uid));
+
+      batch.delete(doc(db, "users", uid));
+      await batch.commit();
+
       setUsers(prev => prev.filter(u => u.uid !== uid));
       setSelectedUser(null);
     } catch (err) {
-      console.error("Error deleting user doc:", err);
+      console.error("Error deleting user doc atomically:", err);
+      alert("Foydalanuvchini o'chirishda xatolik yuz berdi.");
     }
   };
 
