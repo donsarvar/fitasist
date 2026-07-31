@@ -4,6 +4,7 @@ import { FitProvider, useFit } from "./src/lib/fitasist/store";
 import { Onboarding } from "./src/components/fitasist/Onboarding";
 import { AppShell } from "./src/components/fitasist/AppShell";
 import { Login } from "./src/components/fitasist/Login";
+import { ErrorBoundary } from "./src/components/ui/ErrorBoundary";
 import "./src/styles.css";
 
 function Gate() {
@@ -61,9 +62,11 @@ function Gate() {
 function App() {
   return (
     <React.StrictMode>
-      <FitProvider>
-        <Gate />
-      </FitProvider>
+      <ErrorBoundary>
+        <FitProvider>
+          <Gate />
+        </FitProvider>
+      </ErrorBoundary>
     </React.StrictMode>
   );
 }

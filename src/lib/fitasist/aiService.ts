@@ -15,9 +15,12 @@ async function callGeminiDirect(
   signal?: AbortSignal
 ): Promise<string> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const timeoutSignal = AbortSignal.timeout(15000);
+  const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+
   const response = await fetch(url, {
     method: "POST",
-    signal,
+    signal: combinedSignal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
