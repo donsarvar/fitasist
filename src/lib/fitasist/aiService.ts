@@ -112,38 +112,40 @@ async function callBackendProxy(
   signal?: AbortSignal
 ): Promise<string> {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
+  const fetchUrl = `${BACKEND_URL}/api/chat`;
   const fetchSignal = signal || AbortSignal.timeout(25000);
 
-  const response = await fetch(`${BACKEND_URL}/api/chat`, {
-    method: "POST",
-    signal: fetchSignal,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      messages: geminiMessages,
-      systemPrompt,
-    }),
-  });
+  try {
+    const response = await fetch(fetchUrl, {
+      method: "POST",
+      signal: fetchSignal,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: geminiMessages,
+        systemPrompt,
+      }),
+    });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Backend Proxy ${response.status}: ${errText.substring(0, 150)}`);
-  }
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Backend Status ${response.status}: ${errText.substring(0, 150)}`);
+    }
 
-  const data = await response.json();
-  const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!replyText) {
-    throw new Error("Backend AI Proxy javob qaytarmadi.");
+    const data = await response.json();
+    const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!replyText) {
+      throw new Error("Backend AI Proxy bo'sh javob qaytardi.");
+    }
+    return replyText;
+  } catch (err: any) {
+    throw new Error(`[Proxy ${fetchUrl}]: ${err?.message || err}`);
   }
-  return replyText;
 }
 
 function handleAIError(error: any): string {
   console.error("AI request failed across all providers:", error);
-  const msg = error?.message || "";
-  if (msg.includes("Failed to fetch") || msg.includes("NetworkError")) {
-    return `⚠️ Internet aloqasi uzildi. Iltimos, tarmoqni tekshirib qayta yuboring.`;
-  }
-  return `⚠️ AI bilan bog'lanishda vaqtinchalik xatolik: ${msg.substring(0, 100)}`;
+  const msg = error?.message || error?.toString() || "Unknown error";
+  return `⚠️ AI Xatoligi (${error?.name || "Error"}): ${msg}`;
 }
 
 export async function askAICoach(
