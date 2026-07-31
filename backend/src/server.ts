@@ -22,6 +22,9 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "x-gemini-key"]
 }));
 
+// Enable preflight OPTIONS handling for all endpoints
+app.options("*", cors());
+
 // Body parsing middleware
 app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ extended: true, limit: "15mb" }));
