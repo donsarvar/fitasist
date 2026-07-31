@@ -107,6 +107,38 @@ async function callOpenRouterFallback(
   return reply.trim();
 }
 
+async function callBackendProxy(
+  geminiMessages: any[],
+  systemPrompt: string,
+  signal?: AbortSignal
+): Promise<string> {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
+  const timeoutSignal = AbortSignal.timeout(15000);
+  const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+
+  const response = await fetch(`${BACKEND_URL}/api/chat`, {
+    method: "POST",
+    signal: combinedSignal,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: geminiMessages,
+      systemPrompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Backend Proxy ${response.status}: ${errText.substring(0, 150)}`);
+  }
+
+  const data = await response.json();
+  const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!replyText) {
+    throw new Error("Backend AI Proxy javob qaytarmadi.");
+  }
+  return replyText;
+}
+
 function handleAIError(error: any): string {
   console.error("AI request failed across all providers:", error);
   const msg = error?.message || "";
@@ -172,21 +204,34 @@ Foydalanuvchiga do'stona va samimiy munosabatda bo'l.
     geminiMessages.shift();
   }
 
-  // 1-bosqich: Gemini 2.0 Flash
-  try {
-    if (signal?.aborted) return null;
-    return await callGeminiDirect(geminiMessages, systemPrompt, apiKey, signal);
-  } catch (geminiErr: any) {
-    if (geminiErr.name === "AbortError") return null;
-    console.warn("Primary Gemini failed, switching instantly to OpenRouter Fallback...", geminiErr.message);
+  // 1-bosqich: Gemini Direct (if valid client key exists)
+  if (apiKey && apiKey.length > 15) {
+    try {
+      if (signal?.aborted) return null;
+      return await callGeminiDirect(geminiMessages, systemPrompt, apiKey, signal);
+    } catch (geminiErr: any) {
+      if (geminiErr.name === "AbortError") return null;
+      console.warn("Primary Gemini client fetch failed, switching to OpenRouter...", geminiErr.message);
+    }
   }
 
-  // 2-bosqich: OpenRouter Fallback (Instant seamless transition)
+  // 2-bosqich: OpenRouter Fallback (if valid client key exists)
+  if (OPENROUTER_KEY && OPENROUTER_KEY.length > 15) {
+    try {
+      if (signal?.aborted) return null;
+      return await callOpenRouterFallback(geminiMessages, systemPrompt, signal);
+    } catch (fallbackErr: any) {
+      if (fallbackErr.name === "AbortError") return null;
+      console.warn("OpenRouter client fetch failed, switching to Backend Proxy...", fallbackErr.message);
+    }
+  }
+
+  // 3-bosqich: Backend Proxy Fallback (Secure multi-ai proxy on server)
   try {
     if (signal?.aborted) return null;
-    return await callOpenRouterFallback(geminiMessages, systemPrompt, signal);
-  } catch (fallbackErr: any) {
-    if (fallbackErr.name === "AbortError") return null;
-    return handleAIError(fallbackErr);
+    return await callBackendProxy(geminiMessages, systemPrompt, signal);
+  } catch (proxyErr: any) {
+    if (proxyErr.name === "AbortError") return null;
+    return handleAIError(proxyErr);
   }
 }
