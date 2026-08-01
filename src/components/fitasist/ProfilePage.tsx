@@ -127,34 +127,41 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
     setEditModalOpen(false);
   };
 
-  // Avatar Upload Handler: compresses image and uploads to Firebase Storage
+  // Avatar Upload Handler: compresses image and updates profile state reliably
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setPhotoUploading(true);
     try {
-      // Compress to lightweight JPEG blob on the client-side
+      // Compress to lightweight JPEG blob (~15-20KB) on the client-side
       const compressedBlob = await compressAvatarToBlob(file);
       
-      if (user) {
-        // Upload compressed Blob to Firebase Storage bucket
-        const storageRef = ref(storage, `users/${user.uid}/profile_photo.jpg`);
-        const snapshot = await uploadBytes(storageRef, compressedBlob);
-        const downloadUrl = await getDownloadURL(snapshot.ref);
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedBlob);
+      reader.onload = async () => {
+        const dataUrl = reader.result as string;
         
-        // Save the Firebase Storage URL into Firestore profile
-        update({ profile: { ...p!, photoUrl: downloadUrl } });
-      } else {
-        const reader = new FileReader();
-        reader.readAsDataURL(compressedBlob);
-        reader.onload = () => {
-          update({ profile: { ...p!, photoUrl: reader.result as string } });
-        };
-      }
+        // Update local and Firestore profile state instantly with compressed avatar
+        if (p) {
+          update({ profile: { ...p, photoUrl: dataUrl } });
+        }
+
+        // Optional sync to Firebase Storage if bucket is active
+        if (user) {
+          try {
+            const storageRef = ref(storage, `users/${user.uid}/profile_photo.jpg`);
+            const snapshot = await uploadBytes(storageRef, compressedBlob);
+            const downloadUrl = await getDownloadURL(snapshot.ref);
+            update({ profile: { ...p!, photoUrl: downloadUrl } });
+          } catch (storageErr) {
+            console.warn("Firebase Storage bucket optional sync skipped, used Data URL avatar fallback:", storageErr);
+          }
+        }
+      };
     } catch (err) {
       console.error("Profile photo upload failed:", err);
-      alert("Profil rasmini yuklab bo'lmadi. Agarda xatolik takrorlansa, Firebase Console (Xotira) qismida Storage faollashtirilganligini va unga ruxsat berilganligini tekshiring.");
+      alert("Profil rasmini yuklashda xatolik yuz berdi. Iltimos qayta urining.");
     } finally {
       setPhotoUploading(false);
     }

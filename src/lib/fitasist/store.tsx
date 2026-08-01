@@ -31,13 +31,9 @@ export function FitProvider({ children }: { children: ReactNode }) {
   const [authLoading, setAuthLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
 
-  // Sync theme class with document element
+  // Enforce Light Mode default on document element
   useEffect(() => {
-    if (state.theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.remove("dark");
   }, [state.theme]);
 
   // Monitor auth state changes
@@ -80,7 +76,7 @@ export function FitProvider({ children }: { children: ReactNode }) {
           return {
             ...s,
             profile: nextProfile,
-            theme: data.theme || s.theme,
+            theme: "light",
             simulatedDayOffset: data.simulatedDayOffset !== undefined ? data.simulatedDayOffset : s.simulatedDayOffset,
           };
         });
