@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "142746402504",
+    "project_id": "fitasist-428cc",
+    "storage_bucket": "fitasist-428cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142746402504:android:31ad7b795f0615f9e16ffd",
+        "android_client_info": {
+          "package_name": "com.fitasist.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142746402504-a19plpa744a980r1kcv16kirrpm3mja9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fitasist.app",
+            "certificate_hash": "6ad48bdccd94703e6874cad893bc193326aeac4b"
+          }
+        },
+        {
+          "client_id": "142746402504-fjjqs4lk3lhmtip25o94fuib45nn554e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fitasist.app",
+            "certificate_hash": "acb0ee52cf68f199dd02c7334e026e5c2c73e533"
+          }
+        },
+        {
+          "client_id": "142746402504-uphfntq45hdelavptjcctabgmrel223s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fitasist.app",
+            "certificate_hash": "e4d96ab96238de3d28b65e2b1a1d64eec9df11d3"
+          }
+        },
+        {
+          "client_id": "142746402504-97aetvesftf2fu556pgaoev4t8a7n98l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB9DdzxjkRbmw6nnAui5CpXmNAeZKKj38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142746402504-97aetvesftf2fu556pgaoev4t8a7n98l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

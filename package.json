@@ -1,0 +1,26 @@
+{
+  "name": "fitasist",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FitAsist - Fitness & AI Assistant Full-Stack Monorepo Platform",
+  "workspaces": [
+    "apps/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace=apps/web run dev",
+    "dev:mobile": "npm --workspace=apps/mobile run dev",
+    "dev:backend": "npm --workspace=services/backend run dev",
+    "build:web": "npm --workspace=apps/web run build",
+    "build:mobile": "npm --workspace=apps/mobile run build",
+    "build:backend": "npm --workspace=services/backend run build"
+  },
+  "keywords": [
+    "fitasist",
+    "fitness",
+    "ai",
+    "monorepo"
+  ],
+  "author": "Sarvarbek Salimov",
+  "license": "ISC"
+}
