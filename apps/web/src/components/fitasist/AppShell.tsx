@@ -336,9 +336,9 @@ function Dashboard({ onOpenChat, onOpenCalorie, onOpenSettings, onOpenMarathons 
       </div>
 
       {/* AI Hero */}
-      <div className="mt-5 relative overflow-hidden rounded-3xl gradient-mesh text-white shadow-hero p-5 flex flex-col gap-4">
-        <div className="absolute -top-16 -right-16 h-56 w-56 rounded-full bg-white/20 blur-3xl" />
-        <div className="absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-black/20 blur-3xl" />
+      <div className="mt-5 relative overflow-hidden isolate rounded-3xl gradient-mesh text-white shadow-hero p-5 flex flex-col gap-4">
+        <div className="absolute -top-16 -right-16 h-56 w-56 rounded-full bg-white/20 blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
 
         <div className="relative flex items-start gap-4">
           <div className="relative h-20 w-20 shrink-0">
