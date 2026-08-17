@@ -1,40 +1,41 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Home,
-  Ruler,
+  House,
+  ChartBar,
   Trophy,
-  Droplet,
-  BarChart3,
+  Drop,
   Bell,
   Moon,
   Sun,
-  Settings as SettingsIcon,
-  Send,
-  Sparkles,
-  ChevronDown,
+  GearSix,
+  PaperPlaneTilt,
+  Sparkle,
+  CaretDown,
   X,
   Check,
   Plus,
   ArrowUp,
   ArrowDown,
-  AlertTriangle,
-  MessageSquare,
-  FastForward,
-  Database,
-  Zap,
-  Trash2,
-  Download,
-  Upload,
-  LogOut,
-  Shield,
-  Flame,
-  Utensils,
+  Warning,
+  ChatCircleText,
+  FastForward as FastForwardIcon,
+  Database as DatabaseIcon,
+  Lightning,
+  Trash,
+  DownloadSimple,
+  UploadSimple,
+  SignOut,
+  ShieldCheck,
+  Fire,
+  ForkKnife,
   Target,
   Camera,
   User,
-  Edit3,
-  Calendar as CalendarIcon,
-} from "lucide-react";
+  PencilSimple,
+  CalendarBlank,
+  Medal,
+  Ruler,
+} from "@phosphor-icons/react";
 import { useFit } from "@/lib/fitasist/store";
 import { calcAge, calorieTargetKcal, coachReply, dailyAdvice, hydrationTargetL, proteinTargetG, bodyFatNavy } from "@/lib/fitasist/coach";
 import type { AppNotification, Challenge, Measurement, Language } from "@/lib/fitasist/types";
@@ -44,6 +45,7 @@ import { AdminDashboard } from "./AdminDashboard";
 import { ChatPage } from "./ChatPage";
 import { CalorieModal } from "./CalorieModal";
 import { ProfilePage } from "./ProfilePage";
+import { MarathonPage, getNextMarathon, getDaysLeft } from "./MarathonPage";
 import { t } from "@/lib/fitasist/translations";
 import { auth } from "@/lib/firebase";
 import {
@@ -59,7 +61,7 @@ import {
 
 import { pingAIServer } from "@/lib/fitasist/aiService";
 
-type Tab = "dashboard" | "stats" | "challenges" | "profile";
+type Tab = "dashboard" | "stats" | "challenges" | "marathons" | "profile";
 
 export function AppShell() {
   const { state, update, todayHydration, updateHydration, pushNotification, user } = useFit();
@@ -126,11 +128,13 @@ export function AppShell() {
   const screen = (() => {
     switch (tab) {
       case "dashboard":
-        return <Dashboard onOpenChat={() => setCoachOpen(true)} onOpenCalorie={() => setCalorieOpen(true)} onOpenSettings={() => setSettingsOpen(true)} />;
+        return <Dashboard onOpenChat={() => setCoachOpen(true)} onOpenCalorie={() => setCalorieOpen(true)} onOpenSettings={() => setSettingsOpen(true)} onOpenMarathons={() => setTab("marathons")} />;
       case "stats":
         return <Stats />;
       case "challenges":
         return <Challenges />;
+      case "marathons":
+        return <MarathonPage lang={state.profile?.language || "uz"} />;
       case "profile":
         return <ProfilePage onOpenSettings={() => setSettingsOpen(true)} />;
     }
@@ -149,13 +153,13 @@ export function AppShell() {
           </div>
           <div className="flex items-center gap-2">
             <IconBtn onClick={() => update({ theme: state.theme === "dark" ? "light" : "dark" })}>
-              {state.theme === "dark" ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
+              {state.theme === "dark" ? <Sun size={18} weight="fill" /> : <Moon size={18} weight="fill" />}
             </IconBtn>
             <button
               onClick={() => setNotifOpen(true)}
               className="relative grid h-9 w-9 place-items-center rounded-full bg-white dark:bg-[#12131a] shadow-soft border border-border dark:border-border/10 text-text-secondary dark:text-text-primary"
             >
-              <Bell className="h-4 w-4" />
+              <Bell size={16} weight="fill" />
               {unread > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-destructive text-[10px] font-bold text-white grid place-items-center animate-pulse">
                   {unread}
@@ -183,30 +187,29 @@ export function AppShell() {
         </main>
 
         <nav className="fixed bottom-[calc(16px+env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2 w-[calc(100%-32px)] max-w-[448px]">
-          <div className="relative glass-nav rounded-[30px] shadow-card px-3 py-2 flex items-center justify-between border border-white/60">
-            {(
-              [
-                { k: "dashboard", icon: Home, label: t("home", state.profile?.language) },
-                { k: "stats", icon: BarChart3, label: t("stats", state.profile?.language) },
-                { k: "challenges", icon: Trophy, label: t("goals", state.profile?.language) },
-                { k: "profile", icon: User, label: state.profile?.language === "ru" ? "Профиль" : state.profile?.language === "en" ? "Profile" : "Profil" },
-              ] as const
-            ).map((item) => {
+          <div className="relative glass-nav rounded-[30px] shadow-card px-2 py-2 flex items-center justify-between border border-white/60">
+            {([
+              { k: "dashboard", icon: House, label: t("home", state.profile?.language) },
+              { k: "stats", icon: ChartBar, label: t("stats", state.profile?.language) },
+              { k: "marathons", icon: Medal, label: state.profile?.language === "ru" ? "Марафон" : state.profile?.language === "en" ? "Races" : "Marafon" },
+              { k: "challenges", icon: Trophy, label: t("goals", state.profile?.language) },
+              { k: "profile", icon: User, label: state.profile?.language === "ru" ? "Профиль" : state.profile?.language === "en" ? "Profile" : "Profil" },
+            ] as const).map((item) => {
               const Icon = item.icon;
               const active = tab === item.k;
               return (
                 <button
                   key={item.k}
-                  onClick={() => setTab(item.k)}
-                  className={`relative flex flex-col items-center gap-0.5 rounded-full py-2 px-3 transition-all ${
+                  onClick={() => setTab(item.k as Tab)}
+                  className={`relative flex flex-col items-center gap-0.5 rounded-full py-2 px-2.5 transition-all ${
                     active ? "text-white" : "text-[#6B7280] dark:text-text-muted"
                   }`}
                 >
                   {active && (
                     <span className="absolute inset-0 rounded-full gradient-primary shadow-button -z-0" />
                   )}
-                  <Icon className="h-4 w-4 relative z-10" />
-                  <span className="text-[10px] font-semibold relative z-10">{item.label}</span>
+                  <Icon size={16} weight={active ? "fill" : "regular"} className="relative z-10" />
+                  <span className="text-[9px] font-semibold relative z-10">{item.label}</span>
                 </button>
               );
             })}
@@ -241,7 +244,7 @@ export function AppShell() {
             onClick={() => setCoachOpen(true)}
             className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-4 z-40 grid h-14 w-14 place-items-center rounded-full gradient-primary text-white shadow-hero hover:scale-105 active:scale-95 transition-transform"
           >
-            <MessageSquare className="h-6 w-6" />
+            <ChatCircleText size={24} weight="fill" />
           </button>
         )}
       </div>
@@ -277,7 +280,7 @@ function Card({ className = "", children }: { className?: string; children: Reac
 
 /* ---------- Dashboard ---------- */
 
-function Dashboard({ onOpenChat, onOpenCalorie, onOpenSettings }: { onOpenChat: () => void; onOpenCalorie: () => void; onOpenSettings: () => void }) {
+function Dashboard({ onOpenChat, onOpenCalorie, onOpenSettings, onOpenMarathons }: { onOpenChat: () => void; onOpenCalorie: () => void; onOpenSettings: () => void; onOpenMarathons: () => void }) {
   const { state, todayHydration, todayKey } = useFit();
   const p = state.profile;
   const todayStr = todayKey();
@@ -356,10 +359,45 @@ function Dashboard({ onOpenChat, onOpenCalorie, onOpenSettings }: { onOpenChat: 
           onClick={onOpenChat}
           className="relative mt-1 w-full h-12 rounded-2xl bg-white text-brand text-xs font-bold shadow-button flex items-center justify-center gap-2 hover:bg-white/90 active:scale-98 transition-all"
         >
-          <MessageSquare className="h-4 w-4 text-brand" />
+          <ChatCircleText size={16} weight="fill" className="text-brand" />
           {t("talkToCoach", p?.language)}
         </button>
       </div>
+
+      {/* Nearest Marathon Card */}
+      {(() => {
+        const next = getNextMarathon();
+        if (!next) return null;
+        const daysLeft = getDaysLeft(next.date);
+        const lang = p?.language || "uz";
+        const label =
+          lang === "ru" ? "Ближайший марафон" :
+          lang === "en" ? "Nearest Marathon" :
+          "Eng yaqin marafon";
+        const daysLabel =
+          lang === "ru" ? `${daysLeft} дней` :
+          lang === "en" ? `${daysLeft} days` :
+          `${daysLeft} kun`;
+        return (
+          <button
+            onClick={onOpenMarathons}
+            className="mt-4 w-full p-4 rounded-3xl bg-gradient-to-br from-brand/10 to-brand/5 border border-brand/25 shadow-soft flex items-center justify-between gap-3 active:scale-[0.98] transition-all text-left"
+          >
+            <div className="flex items-center gap-3">
+              <div className="text-2xl select-none">{next.flag}</div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand">{label}</span>
+                <p className="text-sm font-bold text-text-primary mt-0.5 leading-tight">{next.nameUz}</p>
+                <p className="text-[11px] text-text-muted">{next.city}</p>
+              </div>
+            </div>
+            <div className="shrink-0 flex flex-col items-center justify-center rounded-2xl bg-brand/15 px-3 py-2 min-w-[56px]">
+              <span className="text-xl font-black text-brand leading-tight">{daysLeft}</span>
+              <span className="text-[9px] font-bold text-brand uppercase tracking-wide">{daysLabel}</span>
+            </div>
+          </button>
+        );
+      })()}
 
       {/* Personal Motivational Goal Banner */}
       {p?.goal ? (
@@ -378,7 +416,7 @@ function Dashboard({ onOpenChat, onOpenCalorie, onOpenSettings }: { onOpenChat: 
             className="p-2 rounded-xl bg-secondary-bg text-text-muted hover:text-brand transition-colors shrink-0"
             title="Maqsadni tahrirlash"
           >
-            <Edit3 className="h-4 w-4" />
+            <PencilSimple size={16} weight="bold" />
           </button>
         </div>
       ) : (
@@ -474,7 +512,7 @@ function ScoreCard({ label, value, sub, color, ring, lang }: { label: string; va
         <div className="absolute inset-0 grid place-items-center text-[15px] font-bold text-text-primary">{value}</div>
       </div>
       <div className="mt-2 text-[11px] font-medium" style={{ color }}>{sub}</div>
-      <div className="mt-1 text-[10px] text-text-muted flex items-center gap-0.5"><ArrowUp className="h-2.5 w-2.5 text-success" />{t("pointsPlus", lang)}</div>
+      <div className="mt-1 text-[10px] text-text-muted flex items-center gap-0.5"><ArrowUp size={10} weight="bold" className="text-success" />{t("pointsPlus", lang)}</div>
     </Card>
   );
 }
@@ -730,7 +768,7 @@ function Measurements() {
                 </div>
               </div>
               <button onClick={() => del(m.id)} className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive">
-                <Trash2 className="h-4 w-4" />
+                <Trash size={16} weight="bold" />
               </button>
             </Card>
           ))}
@@ -755,7 +793,7 @@ function StatBig({ label, value, diff, sub }: { label: string; value: number | s
       {sub && <div className="text-[10px] text-text-muted uppercase tracking-wide">{sub}</div>}
       {diff !== null && (
         <div className={`mt-1 flex items-center text-[11px] font-medium ${diff < 0 ? "text-success" : "text-warning"}`}>
-          {diff < 0 ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />}
+          {diff < 0 ? <ArrowDown size={12} weight="bold" /> : <ArrowUp size={12} weight="bold" />}
           {Math.abs(diff)}
         </div>
       )}
@@ -809,7 +847,7 @@ function Challenges() {
 
       {main ? <ActiveChallengeCard c={main} onDo={() => doToday(main)} /> : (
          <Card className="mt-5 p-8 text-center">
-           <Trophy className="mx-auto h-10 w-10 text-brand" />
+           <Trophy size={40} weight="fill" className="mx-auto text-brand" />
            <p className="mt-3 text-sm text-text-muted">
              {lang === "ru" ? "Активных целей нет. Создайте новую ниже!" : lang === "en" ? "No active goals. Create one below!" : "Faol maqsadlar yo'q. Quyida yangisini yarating!"}
            </p>
@@ -819,8 +857,8 @@ function Challenges() {
       <SectionTitle>{t("createNewGoal", lang)}</SectionTitle>
       <Card className="p-4">
         <button onClick={() => setShowForm(!showForm)} className="w-full flex items-center justify-between text-sm font-semibold text-text-primary">
-          <span className="flex items-center gap-2"><Plus className="h-4 w-4 text-brand" /> {t("addNewGoal", lang)}</span>
-          <ChevronDown className={`h-4 w-4 text-text-muted transition-transform ${showForm ? "rotate-180" : ""}`} />
+          <span className="flex items-center gap-2"><Plus size={16} weight="bold" className="text-brand" /> {t("addNewGoal", lang)}</span>
+          <CaretDown size={16} weight="bold" className={`text-text-muted transition-transform ${showForm ? "rotate-180" : ""}`} />
         </button>
         {showForm && (
           <div className="mt-4 space-y-4 animate-fade-in">
@@ -832,25 +870,25 @@ function Challenges() {
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {[
                   {
-                    icon: <Trophy className="h-3.5 w-3.5 text-amber-500" />,
+                    icon: <Trophy size={14} weight="fill" className="text-amber-500" />,
                     name: { uz: "Planka mashqi", ru: "Планка", en: "Plank Exercise" },
                     duration: 30,
                     dailyTarget: { uz: "2 daqiqa", ru: "2 минуты", en: "2 minutes" }
                   },
                   {
-                    icon: <Zap className="h-3.5 w-3.5 text-blue-500" />,
+                    icon: <Lightning size={14} weight="fill" className="text-blue-500" />,
                     name: { uz: "Otjimaniya (Push-up)", ru: "Отжимания", en: "Push-ups" },
                     duration: 30,
                     dailyTarget: { uz: "50 marta", ru: "50 раз", en: "50 times" }
                   },
                   {
-                    icon: <Ruler className="h-3.5 w-3.5 text-emerald-500" />,
+                    icon: <Ruler size={14} weight="fill" className="text-emerald-500" />,
                     name: { uz: "Kunlik yugurish", ru: "Ежедневный бег", en: "Daily Running" },
                     duration: 30,
                     dailyTarget: { uz: "3 km", ru: "3 км", en: "3 km" }
                   },
                   {
-                    icon: <Droplet className="h-3.5 w-3.5 text-sky-500" />,
+                    icon: <Drop size={14} weight="fill" className="text-sky-500" />,
                     name: { uz: "Suv ichish odati", ru: "Питье воды", en: "Water Intake" },
                     duration: 21,
                     dailyTarget: { uz: "2 litr", ru: "2 литра", en: "2 liters" }
@@ -1168,7 +1206,7 @@ function Hydration() {
       {warn && (
         <div className="mt-5 rounded-3xl bg-warning/15 border border-warning/30 p-4 shadow-soft flex gap-3 animate-fade-in">
           <div className="grid h-10 w-10 place-items-center rounded-2xl bg-warning text-white shrink-0">
-            <AlertTriangle className="h-5 w-5" />
+            <Warning size={20} weight="fill" />
           </div>
           <p className="text-xs leading-relaxed text-[#7C4A03]">
             {lang === "ru" ? (
@@ -1279,7 +1317,7 @@ function Stats() {
             subTab === "analytics" ? "gradient-primary text-white shadow-button" : "text-text-muted hover:text-text-primary"
           }`}
         >
-          <BarChart3 className="h-3.5 w-3.5" />
+          <ChartBar size={14} weight="bold" />
           {lang === "ru" ? "Аналитика" : lang === "en" ? "Analytics" : "Analitika"}
         </button>
 
@@ -1289,7 +1327,7 @@ function Stats() {
             subTab === "body" ? "gradient-primary text-white shadow-button" : "text-text-muted hover:text-text-primary"
           }`}
         >
-          <Ruler className="h-3.5 w-3.5" />
+          <Ruler size={14} weight="bold" />
           {lang === "ru" ? "Замеры" : lang === "en" ? "Body" : "O'lchovlar"}
         </button>
 
@@ -1299,7 +1337,7 @@ function Stats() {
             subTab === "water" ? "gradient-primary text-white shadow-button" : "text-text-muted hover:text-text-primary"
           }`}
         >
-          <Droplet className="h-3.5 w-3.5" />
+          <Drop size={14} weight="bold" />
           {lang === "ru" ? "Вода" : lang === "en" ? "Water" : "Suv"}
         </button>
       </div>
@@ -1598,7 +1636,7 @@ function NotifSheet({ onClose }: { onClose: () => void }) {
                 n.kind === "challenge" ? "bg-warning/10 text-warning" :
                 "bg-brand/10 text-brand"
               }`}>
-                {n.kind === "water" ? <Droplet className="h-5 w-5" /> : n.kind === "creatine" ? <AlertTriangle className="h-5 w-5" /> : n.kind === "challenge" ? <Trophy className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
+                {n.kind === "water" ? <Drop size={20} weight="fill" /> : n.kind === "creatine" ? <Warning size={20} weight="fill" /> : n.kind === "challenge" ? <Trophy size={20} weight="fill" /> : <Sparkle size={20} weight="fill" />}
               </div>
               <div className="flex-1">
                 <div className="flex items-baseline justify-between gap-2">
@@ -1619,14 +1657,14 @@ function ToastCard({ n, onClose }: { n: AppNotification; onClose: () => void }) 
   return (
     <div className="rounded-3xl bg-surface shadow-card border border-border p-4 flex gap-3">
       <div className={`grid h-10 w-10 place-items-center rounded-2xl ${n.kind === "creatine" ? "bg-destructive/15 text-destructive" : "bg-info/15 text-info"}`}>
-        {n.kind === "water" ? <Droplet className="h-5 w-5" /> : n.kind === "creatine" ? <AlertTriangle className="h-5 w-5" /> : <Bell className="h-5 w-5" />}
+        {n.kind === "water" ? <Drop size={20} weight="fill" /> : n.kind === "creatine" ? <Warning size={20} weight="fill" /> : <Bell size={20} weight="fill" />}
       </div>
       <div className="flex-1">
         <div className="text-sm font-semibold text-text-primary">{n.title}</div>
         <div className="text-xs text-text-secondary">{n.body}</div>
         {n.action && <button className="mt-2 text-xs font-semibold text-brand">{n.action}</button>}
       </div>
-      <button onClick={onClose} className="text-text-muted h-6 w-6 grid place-items-center"><X className="h-4 w-4" /></button>
+      <button onClick={onClose} className="text-text-muted h-6 w-6 grid place-items-center"><X size={16} weight="bold" /></button>
     </div>
   );
 }
@@ -1673,7 +1711,7 @@ function SettingsSheet({ onClose, onAdminClick }: { onClose: () => void; onAdmin
             onClick={onAdminClick}
             className="w-full h-12 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-500 text-xs font-bold flex items-center justify-center gap-2 border border-amber-500/20 transition-all active:scale-95 mb-1"
           >
-            <Shield className="h-4.5 w-4.5" /> FitAssist
+            <ShieldCheck size={18} weight="fill" /> FitAssist
           </button>
         )}
 
@@ -1715,12 +1753,12 @@ function SettingsSheet({ onClose, onAdminClick }: { onClose: () => void; onAdmin
           }}
           className="w-full h-12 rounded-2xl bg-secondary-bg hover:bg-border text-text-primary text-sm font-semibold flex items-center justify-center gap-2 border border-border transition-all active:scale-95"
         >
-          <LogOut className="h-4 w-4 text-text-secondary" /> {t("logout", lang)}
+          <SignOut size={16} weight="bold" className="text-text-secondary" /> {t("logout", lang)}
         </button>
 
         {!confirmReset ? (
           <button onClick={() => setConfirmReset(true)} className="w-full h-12 rounded-2xl bg-destructive/10 text-destructive text-sm font-semibold flex items-center justify-center gap-2">
-            <Trash2 className="h-4 w-4" /> {lang === "ru" ? "Удалить все данные" : lang === "en" ? "Reset all data" : "Barcha ma'lumotlarni o'chirish"}
+            <Trash size={16} weight="bold" /> {lang === "ru" ? "Удалить все данные" : lang === "en" ? "Reset all data" : "Barcha ma'lumotlarni o'chirish"}
           </button>
         ) : (
           <div className="rounded-2xl bg-destructive/10 border border-destructive/20 p-4">
@@ -1756,7 +1794,7 @@ function Sheet({ onClose, title, subtitle, action, children }: { onClose: () => 
             </div>
             {action}
             <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full bg-white dark:bg-[#1e202e] text-text-secondary dark:text-text-primary shadow-soft border border-border dark:border-border/20 ml-2 hover:opacity-80 active:scale-95 transition-all">
-              <X className="h-4.5 w-4.5" />
+              <X size={18} weight="bold" />
             </button>
           </div>
           <div className="mt-5">{children}</div>
@@ -1813,12 +1851,12 @@ function DevPanel() {
         <div className="rounded-3xl bg-surface shadow-card border border-border p-4 animate-fade-in">
           <div className="flex items-center justify-between">
             <div className="text-xs font-bold text-text-primary">Dasturchi sinov paneli</div>
-            <button onClick={() => setOpen(false)} className="text-text-muted"><ChevronDown className="h-4 w-4" /></button>
+            <button onClick={() => setOpen(false)} className="text-text-muted"><CaretDown size={16} weight="bold" /></button>
           </div>
           <div className="mt-3 space-y-2">
-            <DevBtn onClick={fastForward} icon={<FastForward className="h-4 w-4" />} title="1 kun oldinga surish" sub="Keyingi kunni simulyatsiya qilish" />
-            <DevBtn onClick={simulate} icon={<Bell className="h-4 w-4" />} title="Xabarnomalarni yuborish" sub="Barcha bildirishnomalarni chiqarish" />
-            <DevBtn onClick={fillMock} icon={<Database className="h-4 w-4" />} title="Test ma'lumotlarini to'ldirish" sub="30 kunlik o'lchov yaratish" />
+            <DevBtn onClick={fastForward} icon={<FastForwardIcon size={16} weight="bold" />} title="1 kun oldinga surish" sub="Keyingi kunni simulyatsiya qilish" />
+            <DevBtn onClick={simulate} icon={<Bell size={16} weight="bold" />} title="Xabarnomalarni yuborish" sub="Barcha bildirishnomalarni chiqarish" />
+            <DevBtn onClick={fillMock} icon={<DatabaseIcon size={16} weight="bold" />} title="Test ma'lumotlarini to'ldirish" sub="30 kunlik o'lchov yaratish" />
           </div>
           <div className="mt-3 pt-3 border-t border-divider text-[10px] text-text-muted">
             Simulyatsiya sanasi: {currentDate.toLocaleDateString("uz-UZ", { month: "short", day: "numeric", year: "numeric" })}
@@ -1827,7 +1865,7 @@ function DevPanel() {
         </div>
       ) : (
         <button onClick={() => setOpen(true)} className="grid h-12 w-12 place-items-center rounded-full gradient-primary text-white shadow-button">
-          <Zap className="h-5 w-5" />
+          <Lightning size={20} weight="fill" />
         </button>
       )}
     </div>

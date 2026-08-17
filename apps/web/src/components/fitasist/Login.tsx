@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { auth, googleProvider } from "../../lib/firebase";
 import { 
   signInWithPopup, 
@@ -8,7 +8,7 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
-import { LogIn, Mail, Lock, AlertCircle, Chrome } from "lucide-react";
+import { SignIn, EnvelopeSimple, LockSimple, WarningCircle, GoogleLogo } from "@phosphor-icons/react";
 import { Capacitor } from "@capacitor/core";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 
@@ -24,8 +24,6 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
     setError(null);
     try {
       if (Capacitor.isNativePlatform()) {
-        // skipNativeAuth: true bo'lgani uchun biz idToken olib,
-        // JS Firebase SDK ga beramiz — onAuthStateChanged ishonchli ishlaydi
         const result = await FirebaseAuthentication.signInWithGoogle();
         const idToken = result.credential?.idToken;
         if (!idToken) {
@@ -34,13 +32,9 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
         }
         const credential = GoogleAuthProvider.credential(idToken);
         await signInWithCredential(auth, credential);
-        // onAuthStateChanged avtomatik trigger bo'ladi → Gate AppShell ga o'tadi
       } else {
-        // Web brauzerda popup orqali
         await signInWithPopup(auth, googleProvider);
       }
-      // auth.currentUser yangilanganda store.tsx dagi onAuthStateChanged
-      // setUser ni chaqiradi va Gate AppShell ko'rsatadi
     } catch (err: any) {
       console.error("Google login error:", err);
       const code: string = err?.code || "";
@@ -77,7 +71,6 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
-      // onAuthStateChanged trigger bo'ladi → Gate AppShell ga o'tadi
     } catch (err: any) {
       console.error("Email auth error:", err);
       const code: string = err?.code || "";
@@ -117,7 +110,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
 
         {error && (
           <div className="mt-6 w-full flex items-center gap-2.5 rounded-2xl bg-destructive/10 border border-destructive/20 p-4 text-xs font-semibold text-destructive animate-fade-in">
-            <AlertCircle className="h-4.5 w-4.5 shrink-0" />
+            <WarningCircle size={18} weight="fill" className="shrink-0" />
             <div>{error}</div>
           </div>
         )}
@@ -125,7 +118,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
         {/* Email Form */}
         <form onSubmit={handleEmailAuth} className="mt-6 w-full space-y-3">
           <div className="relative">
-            <Mail className="absolute left-4 top-3.5 h-4.5 w-4.5 text-text-placeholder" />
+            <EnvelopeSimple size={18} weight="regular" className="absolute left-4 top-3.5 text-text-placeholder" />
             <input
               type="email"
               placeholder="Email manzilingiz"
@@ -138,7 +131,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-4 top-3.5 h-4.5 w-4.5 text-text-placeholder" />
+            <LockSimple size={18} weight="regular" className="absolute left-4 top-3.5 text-text-placeholder" />
             <input
               type="password"
               placeholder="Parolingiz"
@@ -154,7 +147,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
             disabled={loading}
             className="w-full h-12 rounded-2xl gradient-primary text-white text-sm font-semibold shadow-button flex items-center justify-center gap-2 disabled:opacity-70 active:scale-98 transition-all"
           >
-            <LogIn className="h-4 w-4" />
+            <SignIn size={18} weight="bold" />
             {loading ? "Yuklanmoqda..." : isRegister ? "Ro'yxatdan o'tish" : "Tizimga kirish"}
           </button>
         </form>
@@ -184,7 +177,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
             disabled={loading}
             className="w-full h-12 rounded-2xl bg-surface border border-border shadow-soft flex items-center justify-center gap-3 text-sm font-semibold text-text-primary hover:bg-secondary-bg active:scale-98 transition-all disabled:opacity-75"
           >
-            <Chrome className="h-4.5 w-4.5 text-brand" />
+            <GoogleLogo size={18} weight="bold" className="text-brand" />
             Google akkaunt orqali kirish
           </button>
         </div>

@@ -1,31 +1,18 @@
 import React, { useState } from "react";
 import { useFit } from "@/lib/fitasist/store";
 import {
-  User,
-  Settings as SettingsIcon,
-  Edit3,
+  GearSix,
+  PencilSimple,
   Camera,
   Target,
-  Flame,
-  HeartPulse,
+  Fire,
+  Heartbeat,
   Ruler,
-  Scale,
-  Calendar as CalendarIcon,
-  ChevronRight,
-  Check,
-  Moon,
-  Sun,
-  Globe,
-  LogOut,
-  Trash2,
-  Award,
-  Zap,
-  Heart,
+  Scales,
+  Lightning,
+  Question,
   X,
-  Shield,
-  HelpCircle,
-  ChevronDown,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { calcAge, calorieTargetKcal, hydrationTargetL, proteinTargetG } from "@/lib/fitasist/coach";
 import { t } from "@/lib/fitasist/translations";
 import { auth, storage } from "@/lib/firebase";
@@ -242,7 +229,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
             className="grid h-10 w-10 place-items-center rounded-2xl bg-surface border border-border shadow-soft text-text-secondary hover:text-brand transition-colors"
             title="Sozlamalar"
           >
-            <SettingsIcon className="h-5 w-5" />
+            <GearSix className="h-5 w-5" weight="bold" />
           </button>
         </div>
       </div>
@@ -264,7 +251,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
             </div>
 
             <label className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white text-brand grid place-items-center shadow-md cursor-pointer hover:scale-110 transition-transform">
-              <Camera className="h-4 w-4" />
+              <Camera className="h-4 w-4" weight="bold" />
               <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={photoUploading} />
             </label>
           </div>
@@ -278,7 +265,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
                 className="p-1 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors"
                 title="Tahrirlash"
               >
-                <Edit3 className="h-3.5 w-3.5" />
+                <PencilSimple className="h-3.5 w-3.5" weight="bold" />
               </button>
             </div>
 
@@ -301,7 +288,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
         <div className="mt-5 pt-4 border-t border-white/20 relative z-10">
           <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
             <span className="flex items-center gap-1.5 text-white/90 truncate">
-              <Target className="h-4 w-4 text-amber-300 shrink-0" />
+              <Target className="h-4 w-4 text-amber-300 shrink-0" weight="fill" />
               <span className="truncate">{p?.goal ? p.goal : "Shaxsiy maqsadingiz kiritilmagan"}</span>
             </span>
             <button onClick={openEditModal} className="text-[11px] underline text-white/80 hover:text-white shrink-0 ml-2">
@@ -324,7 +311,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand/10 text-brand shrink-0">
-              <HeartPulse className="h-5 w-5 text-brand" />
+              <Heartbeat className="h-5 w-5 text-brand" weight="fill" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
@@ -338,7 +325,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
                   }`}
                   title="BMI haqida ma'lumot"
                 >
-                  <HelpCircle className="h-3.5 w-3.5" />
+                  <Question className="h-3.5 w-3.5" weight="bold" />
                 </button>
               </div>
               <p className="text-[11px] text-text-muted mt-0.5 truncate">Bo'y va vazningiz mutanosibligi ko'rsatkichi</p>
@@ -436,7 +423,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
             {lang === "ru" ? "Параметры тела" : lang === "en" ? "Body Parameters" : "Tana ko'rsatkichlari"}
           </h3>
           <button onClick={openEditModal} className="text-xs font-bold text-brand hover:underline flex items-center gap-1">
-            <Edit3 className="h-3 w-3" /> Tahrirlash
+            <PencilSimple className="h-3 w-3" weight="bold" /> Tahrirlash
           </button>
         </div>
 
@@ -445,7 +432,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
           <div onClick={openEditModal} className="p-4 rounded-3xl bg-surface border border-border shadow-soft hover:border-brand/40 transition-all cursor-pointer group">
             <div className="flex items-center justify-between text-text-muted mb-2">
               <span className="text-[10px] font-bold uppercase tracking-wider">Bo'yingiz</span>
-              <Ruler className="h-4 w-4 text-brand group-hover:scale-110 transition-transform" />
+              <Ruler className="h-4 w-4 text-brand group-hover:scale-110 transition-transform" weight="bold" />
             </div>
             <div className="text-2xl font-black text-text-primary">{p?.height ?? 175} <span className="text-xs font-normal text-text-muted">sm</span></div>
             <div className="mt-1 text-[10px] text-text-muted">Tana tuzilishi uchun</div>
@@ -455,7 +442,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
           <div onClick={openEditModal} className="p-4 rounded-3xl bg-surface border border-border shadow-soft hover:border-brand/40 transition-all cursor-pointer group">
             <div className="flex items-center justify-between text-text-muted mb-2">
               <span className="text-[10px] font-bold uppercase tracking-wider">Vazningiz</span>
-              <Scale className="h-4 w-4 text-brand group-hover:scale-110 transition-transform" />
+              <Scales className="h-4 w-4 text-brand group-hover:scale-110 transition-transform" weight="bold" />
             </div>
             <div className="text-2xl font-black text-text-primary">{p?.weight ?? 70} <span className="text-xs font-normal text-text-muted">kg</span></div>
             <div className="mt-1 text-[10px] text-text-muted">Kaloriya hisobi uchun</div>
@@ -465,7 +452,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
           <div onClick={openEditModal} className="p-4 rounded-3xl bg-surface border border-border shadow-soft hover:border-brand/40 transition-all cursor-pointer group">
             <div className="flex items-center justify-between text-text-muted mb-2">
               <span className="text-[10px] font-bold uppercase tracking-wider">Tana Turi</span>
-              <Zap className="h-4 w-4 text-amber-500 group-hover:scale-110 transition-transform" />
+              <Lightning className="h-4 w-4 text-amber-500 group-hover:scale-110 transition-transform" weight="bold" />
             </div>
             <div className="text-base font-bold text-text-primary truncate">{getBodyTypeLabel(p?.bodyType)}</div>
             <div className="mt-1 text-[10px] text-text-muted">Metabolizm tezligi</div>
@@ -475,7 +462,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
           <div onClick={openEditModal} className="p-4 rounded-3xl bg-surface border border-border shadow-soft hover:border-brand/40 transition-all cursor-pointer group">
             <div className="flex items-center justify-between text-text-muted mb-2">
               <span className="text-[10px] font-bold uppercase tracking-wider">Faollik</span>
-              <Flame className="h-4 w-4 text-rose-500 group-hover:scale-110 transition-transform" />
+              <Flame className="h-4 w-4 text-rose-500 group-hover:scale-110 transition-transform" weight="bold" />
             </div>
             <div className="text-base font-bold text-text-primary truncate">{getActivityLabel(p?.activity)}</div>
             <div className="mt-1 text-[10px] text-text-muted">Kunlik harakat</div>
@@ -486,7 +473,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
       {/* 🎯 4. DAILY TARGET NUTRITION GOALS */}
       <div className="p-5 rounded-3xl bg-surface border border-border shadow-soft space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
-          <Target className="h-4 w-4 text-brand" /> Kunlik Me'yorlar
+          <Target className="h-4 w-4 text-brand" weight="bold" /> Kunlik Me'yorlar
         </h3>
 
         <div className="grid grid-cols-3 gap-2 text-center">
@@ -516,7 +503,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h3 className="text-lg font-bold text-text-primary">Profil ko'rsatkichlarini tahrirlash</h3>
               <button onClick={() => setEditModalOpen(false)} className="p-1.5 rounded-full bg-secondary-bg text-text-muted hover:text-text-primary">
-                <X className="h-5 w-5" />
+                <X size={18} weight="bold" />
               </button>
             </div>
 
