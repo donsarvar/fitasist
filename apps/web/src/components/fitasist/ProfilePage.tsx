@@ -462,7 +462,7 @@ export function ProfilePage({ onOpenSettings }: { onOpenSettings?: () => void })
           <div onClick={openEditModal} className="p-4 rounded-3xl bg-surface border border-border shadow-soft hover:border-brand/40 transition-all cursor-pointer group">
             <div className="flex items-center justify-between text-text-muted mb-2">
               <span className="text-[10px] font-bold uppercase tracking-wider">Faollik</span>
-              <Flame className="h-4 w-4 text-rose-500 group-hover:scale-110 transition-transform" weight="bold" />
+              <Fire className="h-4 w-4 text-rose-500 group-hover:scale-110 transition-transform" weight="bold" />
             </div>
             <div className="text-base font-bold text-text-primary truncate">{getActivityLabel(p?.activity)}</div>
             <div className="mt-1 text-[10px] text-text-muted">Kunlik harakat</div>
