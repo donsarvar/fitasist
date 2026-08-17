@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>142746402504-jo09fed4bb5te7v6jgrvg4pk6ehvk3ol.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.142746402504-jo09fed4bb5te7v6jgrvg4pk6ehvk3ol</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>142746402504-a19plpa744a980r1kcv16kirrpm3mja9.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCN9s-EnXfqwwQKoN5aIyAChNF83C7VeX8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>142746402504</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.fitasist.app</string>
+	<key>PROJECT_ID</key>
+	<string>fitasist-428cc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fitasist-428cc.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:142746402504:ios:85b35d3d59181261e16ffd</string>
+</dict>
+</plist>

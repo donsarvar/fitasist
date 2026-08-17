@@ -7,7 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import type { ChatSession, ChatMessage } from "@/lib/fitasist/types";
 import { t } from "@/lib/fitasist/translations";
 
-export function ChatPage({ onClose }: { onClose: () => void }) {
+export function ChatPage({ onClose }: { onClose?: () => void }) {
   const { state, update, user, clearChat } = useFit();
   const p = state.profile;
   const sessions = state.chatSessions || [];
@@ -261,7 +261,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
       
       const assistantMsg: ChatMessage = {
         id: crypto.randomUUID(),
-        role: "assistant",
+        role: "ai",
         text: aiResponse || "Javob olib bo'lmadi.",
         createdAt: new Date().toISOString(),
       };

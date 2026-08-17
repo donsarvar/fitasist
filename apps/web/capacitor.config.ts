@@ -9,7 +9,10 @@ const config: CapacitorConfig = {
   },
   plugins: {
     FirebaseAuthentication: {
-      skipNativeAuth: false,
+      // true: JS Firebase SDK auth state ni to'liq boshqaradi.
+      // Bu holda onAuthStateChanged ishonchli ishlaydi va
+      // native/JS SDK o'rtasida konflikt bo'lmaydi.
+      skipNativeAuth: true,
       providers: ['google.com']
     },
     SplashScreen: {

@@ -36,9 +36,18 @@ export function FitProvider({ children }: { children: ReactNode }) {
     document.documentElement.classList.remove("dark");
   }, [state.theme]);
 
-  // Monitor auth state changes
+  // Monitor auth state changes with instant safety timeout
   useEffect(() => {
+    let resolved = false;
+    const authTimeout = setTimeout(() => {
+      if (!resolved) {
+        setAuthLoading(false);
+      }
+    }, 800);
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      resolved = true;
+      clearTimeout(authTimeout);
       setUser(currentUser);
       setAuthLoading(false);
       if (!currentUser) {
@@ -49,7 +58,11 @@ export function FitProvider({ children }: { children: ReactNode }) {
         setProfileLoading(true);
       }
     });
-    return unsubscribe;
+
+    return () => {
+      clearTimeout(authTimeout);
+      unsubscribe();
+    };
   }, []);
 
   // Sync with Firestore in real-time when logged in
@@ -98,10 +111,10 @@ export function FitProvider({ children }: { children: ReactNode }) {
       setProfileLoading(false);
     });
 
-    // Safety fallback: Unblock profileLoading after max 2.5 seconds regardless of network latency
+    // Safety fallback: Unblock profileLoading after max 1.5 seconds regardless of network latency
     const profileSafetyTimer = setTimeout(() => {
       setProfileLoading(false);
-    }, 2500);
+    }, 1500);
     // 2. Sync Hydration logs collection
     const hydraCollRef = collection(db, "users", user.uid, "hydration");
     const unsubHydra = onSnapshot(hydraCollRef, (querySnap) => {

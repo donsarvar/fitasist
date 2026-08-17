@@ -4,6 +4,17 @@
 <dict>
     <key>CAPACITOR_DEBUG</key>
 	<string>$(CAPACITOR_DEBUG)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.142746402504-jo09fed4bb5te7v6jgrvg4pk6ehvk3ol</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -47,5 +58,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>FitAsist taomlarni rasmga olib, ularning kaloriya va oqsil miqdorini AI orqali aniqlash uchun kameradan foydalanadi.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>FitAsist galereyadan taomlar rasmini yuklash va tahlil qilish uchun ruxsat so'raydi.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>FitAsist mashg'ulot natijalari va hisobotlarni galereyaga saqlash uchun ruxsat so'raydi.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>AI Murabbiy bilan ovozli muloqot qilish uchun mikrofondan foydalaniladi.</string>
 </dict>
 </plist>

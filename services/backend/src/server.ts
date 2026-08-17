@@ -75,7 +75,7 @@ async function callKimiFallback(geminiMessages: any[], systemPrompt?: string) {
       throw new Error(`OpenRouter Fallback Error (${response.status}): ${errText} | ${fallbackErr}`);
     }
 
-    const fallbackResult = await fallbackResp.json();
+    const fallbackResult: any = await fallbackResp.json();
     const fallbackReply = fallbackResult.choices?.[0]?.message?.content || "";
     return {
       candidates: [
@@ -88,7 +88,7 @@ async function callKimiFallback(geminiMessages: any[], systemPrompt?: string) {
     };
   }
 
-  const result = await response.json();
+  const result: any = await response.json();
   const replyText = result.choices?.[0]?.message?.content || "";
 
   return {
@@ -122,7 +122,7 @@ app.post("/api/chat", async (req: Request, res: Response, next: NextFunction): P
     // 1. Primary Attempt: Google Gemini API
     if (apiKey) {
       try {
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
         const geminiResponse = await fetch(geminiUrl, {
           method: "POST",
@@ -242,7 +242,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`FitAsist backend server is running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode.`);
 });

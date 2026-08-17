@@ -37,7 +37,7 @@ import {
 } from "lucide-react";
 import { useFit } from "@/lib/fitasist/store";
 import { calcAge, calorieTargetKcal, coachReply, dailyAdvice, hydrationTargetL, proteinTargetG, bodyFatNavy } from "@/lib/fitasist/coach";
-import type { AppNotification, Challenge, Measurement } from "@/lib/fitasist/types";
+import type { AppNotification, Challenge, Measurement, Language } from "@/lib/fitasist/types";
 import { fmtDate, today } from "@/lib/fitasist/storage";
 import { Login } from "./Login";
 import { AdminDashboard } from "./AdminDashboard";

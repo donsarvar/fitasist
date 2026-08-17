@@ -3,27 +3,14 @@ import React, { useState, useEffect } from "react";
 import { auth, googleProvider } from "../../lib/firebase";
 import { 
   signInWithPopup, 
-  signInWithRedirect, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   GoogleAuthProvider,
   signInWithCredential,
-  getRedirectResult,
-  fetchSignInMethodsForEmail
 } from "firebase/auth";
-import { LogIn, Mail, Lock, AlertCircle, Chrome, Smartphone } from "lucide-react";
+import { LogIn, Mail, Lock, AlertCircle, Chrome } from "lucide-react";
 import { Capacitor } from "@capacitor/core";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
-
-declare global {
-  interface Window {
-    handleNativeGoogleSignIn?: (data: { idToken: string }) => Promise<void>;
-    handleNativeGoogleSignInError?: (errorMsg: string) => void;
-    ReactNativeWebView?: {
-      postMessage: (message: string) => void;
-    };
-  }
-}
 
 export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
   const [email, setEmail] = useState("");
@@ -32,84 +19,40 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Catch returning from redirect auth
-  useEffect(() => {
-    const checkRedirect = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          onAuthSuccess();
-        }
-      } catch (err: any) {
-        console.error("Redirect auth error:", err);
-        setError(`Google orqali qaytishda xatolik: ${err.message || err.code}`);
-      }
-    };
-    checkRedirect();
-  }, [onAuthSuccess]);
-
-  useEffect(() => {
-    window.handleNativeGoogleSignIn = async ({ idToken }) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const credential = GoogleAuthProvider.credential(idToken);
-        await signInWithCredential(auth, credential);
-        onAuthSuccess();
-      } catch (err: any) {
-        console.error("Native Firebase sign-in failed:", err);
-        setError(`Google orqali kirishda xatolik: ${err.message || err.code}`);
-        setLoading(false);
-      }
-    };
-
-    window.handleNativeGoogleSignInError = (errorMsg: string) => {
-      console.error("Native Google Sign-In failed:", errorMsg);
-      // Suppress showing error if it's just user canceling the flow
-      if (!errorMsg.includes("12501") && !errorMsg.toLowerCase().includes("cancel")) {
-        setError(`Google orqali kirishda xatolik: ${errorMsg}`);
-      }
-      setLoading(false);
-    };
-
-    return () => {
-      delete window.handleNativeGoogleSignIn;
-      delete window.handleNativeGoogleSignInError;
-    };
-  }, [onAuthSuccess]);
-
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
     try {
       if (Capacitor.isNativePlatform()) {
+        // skipNativeAuth: true bo'lgani uchun biz idToken olib,
+        // JS Firebase SDK ga beramiz — onAuthStateChanged ishonchli ishlaydi
         const result = await FirebaseAuthentication.signInWithGoogle();
-        if (result.credential?.idToken) {
-          const credential = GoogleAuthProvider.credential(result.credential.idToken);
-          await signInWithCredential(auth, credential);
-          onAuthSuccess();
-        } else {
-          throw new Error("Google hisobidan kirish kaliti (idToken) qaytmadi.");
+        const idToken = result.credential?.idToken;
+        if (!idToken) {
+          setError("Google token olinmadi. Qayta urinib ko'ring.");
+          return;
         }
+        const credential = GoogleAuthProvider.credential(idToken);
+        await signInWithCredential(auth, credential);
+        // onAuthStateChanged avtomatik trigger bo'ladi → Gate AppShell ga o'tadi
       } else {
-        const isWebView = window.navigator.userAgent.includes("FitAsistApp");
-        if (isWebView && window.ReactNativeWebView) {
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'GOOGLE_SIGN_IN' }));
-          // Keep loading=true until native sign-in callback returns
-        } else if (isWebView) {
-          await signInWithRedirect(auth, googleProvider);
-        } else {
-          await signInWithPopup(auth, googleProvider);
-          onAuthSuccess();
-        }
+        // Web brauzerda popup orqali
+        await signInWithPopup(auth, googleProvider);
       }
+      // auth.currentUser yangilanganda store.tsx dagi onAuthStateChanged
+      // setUser ni chaqiradi va Gate AppShell ko'rsatadi
     } catch (err: any) {
       console.error("Google login error:", err);
-      // Fallback for some restricted browsers
-      if (err.code === "auth/popup-blocked" || err.code === "auth/popup-closed-by-user") {
-        setError("Brauzer oynani ochishni taqiqladi. Iltimos pochta orqali kiring.");
+      const code: string = err?.code || "";
+      const msg: string = err?.message || "";
+      if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
+        // Foydalanuvchi o'zi yopdi — xato ko'rsatish shart emas
+      } else if (code === "auth/popup-blocked") {
+        setError("Brauzer oynani ochishni taqiqladi. Iltimos email orqali kiring.");
+      } else if (code === "auth/network-request-failed") {
+        setError("Internet ulanishini tekshiring va qayta urinib ko'ring.");
       } else {
-        setError(`Google orqali kirishda xatolik yuz berdi: ${err.message || err.code}`);
+        setError(`Google orqali kirishda xatolik: ${msg || code}`);
       }
     } finally {
       setLoading(false);
@@ -122,6 +65,10 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
       setError("Iltimos, barcha maydonlarni to'ldiring.");
       return;
     }
+    if (password.length < 6) {
+      setError("Parol kamida 6 ta belgidan iborat bo'lishi kerak.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -130,42 +77,26 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
-      onAuthSuccess();
+      // onAuthStateChanged trigger bo'ladi → Gate AppShell ga o'tadi
     } catch (err: any) {
       console.error("Email auth error:", err);
-      
-      // Helper to check for Google Provider
-      const checkGoogleProvider = async (emailAddr: string) => {
-        try {
-          const methods = await fetchSignInMethodsForEmail(auth, emailAddr);
-          return methods.includes("google.com");
-        } catch (e) {
-          return false;
-        }
-      };
-
-      if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
-        const isGoogle = await checkGoogleProvider(email);
-        if (isGoogle) {
-          setError("Ushbu hisob Google orqali yaratilgan. Iltimos, pastdagi Google tugmasini bosib tizimga kiring.");
-        } else {
-          setError("Email yoki parol noto'g'ri. Agar avval Google orqali kirgan bo'lsangiz, pastdagi Google tugmasidan foydalaning.");
-        }
-      } else if (err.code === "auth/email-already-in-use") {
-        const isGoogle = await checkGoogleProvider(email);
-        if (isGoogle) {
-          setError("Ushbu email allaqachon band va Google orqali ochilgan. Iltimos, pastdagi Google tugmasini bosib tizimga kiring.");
-        } else {
-          setError("Bu email allaqachon ro'yxatdan o'tgan. Iltimos, boshqa email kiriting yoki tizimga kiring.");
-        }
-      } else if (err.code === "auth/invalid-email") {
+      const code: string = err?.code || "";
+      if (code === "auth/user-not-found" || code === "auth/wrong-password" || code === "auth/invalid-credential") {
+        setError("Email yoki parol noto'g'ri. Iltimos qayta tekshiring.");
+      } else if (code === "auth/email-already-in-use") {
+        setError("Bu email allaqachon ro'yxatdan o'tgan. Kirish tugmasini bosing.");
+      } else if (code === "auth/invalid-email") {
         setError("Email formati noto'g'ri.");
-      } else if (err.code === "auth/weak-password") {
-        setError("Parol kamida 6 ta belgidan iborat bo'lishi kerak.");
-      } else if (err.code === "auth/operation-not-allowed") {
-        setError("Email va parol orqali kirish Firebase'da yoqilmagan. Iltimos, Firebase Console'dan 'Email/Password' usulini yoqing.");
+      } else if (code === "auth/weak-password") {
+        setError("Parol juda zaif. Kamida 6 ta belgi kiriting.");
+      } else if (code === "auth/operation-not-allowed") {
+        setError("Email/parol orqali kirish yoqilmagan. Firebase Console ni tekshiring.");
+      } else if (code === "auth/network-request-failed") {
+        setError("Internet ulanishini tekshiring va qayta urinib ko'ring.");
+      } else if (code === "auth/too-many-requests") {
+        setError("Ko'p marta noto'g'ri urinish. Keyinroq qayta urinib ko'ring.");
       } else {
-        setError(`Avtorizatsiyada xatolik yuz berdi: ${err.message || err.code}`);
+        setError(`Xatolik yuz berdi: ${err.message || code}`);
       }
     } finally {
       setLoading(false);
@@ -200,6 +131,8 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
               placeholder="Email manzilingiz"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              autoCapitalize="none"
               className="w-full h-12 rounded-2xl border border-input bg-surface pl-11 pr-4 text-sm text-text-primary outline-none focus:border-brand"
             />
           </div>
@@ -211,6 +144,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
               placeholder="Parolingiz"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete={isRegister ? "new-password" : "current-password"}
               className="w-full h-12 rounded-2xl border border-input bg-surface pl-11 pr-4 text-sm text-text-primary outline-none focus:border-brand"
             />
           </div>
@@ -243,9 +177,8 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
           <div className="flex-1 h-px bg-divider" />
         </div>
 
-        {/* Social Logins */}
-        <div className="mt-5 w-full flex flex-col gap-2.5">
-          {/* Google Login */}
+        {/* Google Login */}
+        <div className="mt-5 w-full">
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
@@ -254,25 +187,6 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
             <Chrome className="h-4.5 w-4.5 text-brand" />
             Google akkaunt orqali kirish
           </button>
-
-          {/* Scalable Placeholder for Future SMS Auth Button */}
-          {/* 
-            Ertaga SMS tizimini ulamoqchi bo'lganingizda, faqatgina ushbu izohni olib tashlab,
-            onClick hodisasini telefon orqali kirish funksiyasiga bog'lashingiz kifoya.
-            Dizayn Flexbox yordamida yozilganligi uchun hech narsa buzilmaydi.
-          */}
-          {/*
-          <button
-            onClick={() => {
-              // Kelajakda SMS tizimi funksiyasi shu yerga ulanadi
-              alert("Telefon raqam orqali kirish tizimi tez kunda ishga tushadi!");
-            }}
-            className="w-full h-12 rounded-2xl bg-surface border border-border shadow-soft flex items-center justify-center gap-3 text-sm font-semibold text-text-primary hover:bg-secondary-bg active:scale-98 transition-all"
-          >
-            <Smartphone className="h-4.5 w-4.5 text-success" />
-            Telefon raqami (SMS) orqali kirish
-          </button>
-          */}
         </div>
       </div>
     </div>

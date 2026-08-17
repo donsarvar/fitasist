@@ -1,12 +1,13 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, indexedDBLocalPersistence, initializeAuth } from "firebase/auth";
 import {
   initializeFirestore,
   getFirestore,
   persistentLocalCache,
-  persistentMultipleTabManager,
+  persistentSingleTabManager,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { Capacitor } from "@capacitor/core";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDmi_uljgEwws0ZePxhuW1sENcy8j9yZBE",
@@ -18,29 +19,40 @@ const firebaseConfig = {
   measurementId: "G-E4GV4M5FTB",
 };
 
-// Initialize Firebase safely — prevent double init
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+// Initialize Firebase safely — one instance for the entire page lifetime
+const isFirstInit = getApps().length === 0;
+const app = isFirstInit ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Auth
-export const auth = getAuth(app);
+// Initialize Auth:
+// - First time + native platform: use indexedDBLocalPersistence (session saqlanadi)
+// - Otherwise: getAuth() returns already-initialized instance
+export const auth = (() => {
+  if (isFirstInit && Capacitor.isNativePlatform()) {
+    return initializeAuth(app, {
+      persistence: indexedDBLocalPersistence,
+    });
+  }
+  return getAuth(app);
+})();
+
 export const googleProvider = new GoogleAuthProvider();
 
-// Initialize Firestore with offline cache — safely wrapped so it never crashes
-// If initializeFirestore was already called (e.g. HMR / module re-eval), fall back to getFirestore
-function createDb() {
+// Module-level singleton guard — prevents "Database is closing/hidden" error
+let _db: ReturnType<typeof getFirestore> | null = null;
+
+function getDb() {
+  if (_db) return _db;
   try {
-    return initializeFirestore(app, {
+    _db = initializeFirestore(app, {
       localCache: persistentLocalCache({
-        tabManager: persistentMultipleTabManager(),
+        tabManager: persistentSingleTabManager({ forceOwnership: true }),
       }),
     });
   } catch {
-    // Already initialized — just return the existing instance
-    return getFirestore(app);
+    _db = getFirestore(app);
   }
+  return _db;
 }
 
-export const db = createDb();
-
-// Initialize Storage
+export const db = getDb();
 export const storage = getStorage(app);
