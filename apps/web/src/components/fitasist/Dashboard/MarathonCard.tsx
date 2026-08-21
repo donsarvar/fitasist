@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowRight, MapPin, Mountains, Flag, ShieldCheck } from "@phosphor-icons/react";
+import { ArrowRight, MapPin } from "@phosphor-icons/react";
 import { useFit } from "@/lib/fitasist/store";
 import { getNearestRegionalMarathon, getDaysLeft } from "../MarathonPage";
 
@@ -19,7 +19,7 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
   const badgeText =
     lang === "ru" ? "СЛЕДУЮЩИЙ МАРАФОН" :
     lang === "en" ? "NEXT CHALLENGE" :
-    "ENG YAQIN MARAFON";
+    "KEYINGI CHAQIRUV";
 
   const daysUnit =
     lang === "ru" ? "ДНЕЙ ДО СТАРТА" :
@@ -27,14 +27,9 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
     "KUN QOLDI";
 
   const detailsLabel =
-    lang === "ru" ? "ПОДРОБНЕЕ О ТРАССЕ" :
-    lang === "en" ? "RACE DETAILS" :
-    "MARSHRUT VA TAFSILOTLAR";
-
-  const elevationLabel =
-    lang === "ru" ? "НАБОР ВЫСОТЫ" :
-    lang === "en" ? "ELEVATION" :
-    "BALANDLIK";
+    lang === "ru" ? "Подробнее" :
+    lang === "en" ? "Race Details" :
+    "Batafsil";
 
   const name =
     lang === "ru" ? (next.nameRu || next.nameUz || next.name) :
@@ -44,87 +39,63 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
   // Background image based on the marathon
   const bgImage = next.image || "/marathons/zaamin.jpg";
 
-  // Date formatting
+  // Formatted Date
   const formattedDate = new Date(next.date).toLocaleDateString(
     lang === "ru" ? "ru-RU" : lang === "en" ? "en-US" : "uz-UZ",
-    { day: "numeric", month: "short", year: "numeric" }
+    { day: "numeric", month: "short" }
   );
 
   return (
     <button
       type="button"
       onClick={onOpenMarathons}
-      className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate shadow-hero border border-white/15 dark:border-white/10 active:scale-[0.98] transition-all group bg-[#0a0d14] text-white"
+      className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate shadow-hero border border-white/15 dark:border-white/10 active:scale-[0.98] transition-all group bg-[#090c13] text-white p-5"
     >
-      {/* Background High-Res Nature Scene */}
+      {/* Background Scenic Marathon Image */}
       <div className="absolute inset-0 z-0">
         <img
           src={bgImage}
           alt={name}
-          className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 opacity-60"
+          className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 opacity-55"
         />
-        {/* Cinematic Vignette Overlays for Perfect Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080a0f] via-[#080a0f]/60 to-[#080a0f]/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#080a0f]/80 via-transparent to-[#080a0f]/70" />
+        {/* Soft Contrast Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080a0f] via-[#080a0f]/60 to-[#080a0f]/30" />
       </div>
 
-      {/* Precise A to B Route SVG (Start A -> Mountain Peak Finish B) */}
+      {/* Clean A-to-B Route Line to the Mountain Peak */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
-        viewBox="0 0 400 240"
+        className="absolute right-4 bottom-14 w-44 h-24 pointer-events-none z-[1]"
+        viewBox="0 0 180 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Topography faint contour rings */}
         <path
-          d="M 200 40 C 270 30, 350 70, 380 130"
-          stroke="rgba(255, 255, 255, 0.08)"
-          strokeWidth="1"
-        />
-        <path
-          d="M 220 60 C 280 50, 340 85, 370 145"
-          stroke="rgba(255, 255, 255, 0.05)"
-          strokeWidth="1"
-        />
-
-        {/* Trail Route from Point A to Point B */}
-        <path
-          d="M 185 140 C 220 125, 250 150, 280 110 C 305 75, 325 95, 345 45"
+          d="M 10 85 C 50 80, 70 50, 110 55 C 135 60, 145 35, 165 15"
           stroke="#8B5CF6"
-          strokeWidth="3"
-          strokeDasharray="4 6"
+          strokeWidth="2.5"
+          strokeDasharray="4 5"
           strokeLinecap="round"
         />
-
-        {/* Point A (Start Point) */}
-        <circle cx="185" cy="140" r="4" fill="#38BDF8" />
-        <text x="172" y="132" fill="#38BDF8" fontSize="8" fontWeight="800" fontFamily="sans-serif">START</text>
-
-        {/* Point B (Finish Peak with Flag) */}
-        <circle cx="345" cy="45" r="4" fill="#A855F7" />
-        <circle cx="345" cy="45" r="8" stroke="#A855F7" strokeWidth="1.5" className="animate-ping" opacity="0.6" />
-        <text x="338" y="32" fill="#E9D5FF" fontSize="11" fontWeight="bold" fontFamily="sans-serif">🏁</text>
+        {/* Point A (Start) */}
+        <circle cx="10" cy="85" r="3.5" fill="#38BDF8" />
+        {/* Point B (Finish Peak Flag) */}
+        <circle cx="165" cy="15" r="4" fill="#A855F7" />
+        <text x="156" y="8" fontSize="13">🏁</text>
       </svg>
 
       {/* Main Content */}
-      <div className="relative z-10 p-5 pb-4">
-        {/* Header Tag */}
-        <div className="flex items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#5B4EFF] to-[#8C52FF] text-[10px] font-black tracking-wider uppercase text-white shadow-button">
-            <span>{badgeText}</span>
-          </div>
-          <span className="text-xs font-semibold text-white/75 flex items-center gap-1">
-            <ShieldCheck size={14} weight="fill" className="text-emerald-400" />
-            Rasmiy musobaqa
-          </span>
+      <div className="relative z-10">
+        {/* Top Tag Badge */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#6355FF] text-[10px] font-black tracking-wider uppercase text-white shadow-button">
+          <span>{badgeText}</span>
         </div>
 
         {/* Marathon Title */}
-        <h3 className="mt-2.5 text-[21px] font-black text-white leading-tight tracking-tight drop-shadow-md">
+        <h3 className="mt-2.5 text-[22px] font-black text-white leading-tight tracking-tight drop-shadow-md">
           {name}
         </h3>
 
-        {/* Actual Distance Options */}
+        {/* Distance Pills */}
         <div className="mt-2.5 flex items-center gap-2 flex-wrap">
           {next.distances.map((d, idx) => {
             const isPrimary = idx === 0 || (next.distances.length === 1);
@@ -143,55 +114,30 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           })}
         </div>
 
-        {/* Middle Stats: Days Left Countdown & Actual Elevation / Terrain */}
-        <div className="mt-4 flex items-end justify-between gap-4">
-          {/* Left: Days Countdown */}
+        {/* Countdown & Info */}
+        <div className="mt-4 flex items-end justify-between gap-3">
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-[44px] font-black leading-none bg-gradient-to-br from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">
+              <span className="text-[40px] font-black leading-none bg-gradient-to-br from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">
                 {daysLeft}
               </span>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black tracking-widest text-indigo-300 uppercase leading-none">
-                  {daysUnit}
-                </span>
-              </div>
-            </div>
-            {/* Location & Date */}
-            <div className="mt-2 flex items-center gap-2 text-[11px] font-semibold text-white/80">
-              <span className="flex items-center gap-1">
-                <MapPin size={13} weight="fill" className="text-[#38BDF8]" />
-                {next.city}, {next.country}
+              <span className="text-[10px] font-black tracking-widest text-indigo-300 uppercase leading-none">
+                {daysUnit}
               </span>
+            </div>
+            <div className="mt-2 flex items-center gap-1.5 text-[11px] font-medium text-white/80">
+              <MapPin size={12} weight="fill" className="text-[#38BDF8]" />
+              <span>{next.city}</span>
               <span className="text-white/40">•</span>
               <span>{formattedDate}</span>
             </div>
           </div>
 
-          {/* Right: Actual Technical Elevation Badge (Real Data, no fake %) */}
-          {next.elevationGain && (
-            <div className="shrink-0 flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.08] backdrop-blur-md border border-white/15 min-w-[84px] text-center">
-              <Mountains size={18} weight="fill" className="text-[#38BDF8]" />
-              <span className="text-[13px] font-black text-white mt-1 leading-tight">
-                {next.elevationGain}
-              </span>
-              <span className="text-[8px] font-extrabold text-white/60 uppercase tracking-tight mt-0.5">
-                {elevationLabel}
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Bottom Real Race Details Strip */}
-      <div className="relative z-10 mx-3 mb-3 p-3 rounded-2xl bg-white/[0.08] backdrop-blur-xl border border-white/10 flex items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-1.5 text-white/90 font-semibold text-[11px]">
-          <Flag size={14} weight="fill" className="text-amber-400" />
-          <span>Trassa: {next.terrain || "Tog'li & Shahar"}</span>
-        </div>
-        <div className="shrink-0 flex items-center gap-1 text-[11px] font-black text-indigo-300 uppercase tracking-wide group-hover:text-white group-hover:translate-x-0.5 transition-all">
-          <span>{detailsLabel}</span>
-          <ArrowRight size={12} weight="bold" />
+          {/* Clean Glassmorphic Pill Action Button */}
+          <div className="px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center gap-1.5 text-[11px] font-bold text-white group-hover:bg-[#6355FF] transition-all">
+            <span>{detailsLabel}</span>
+            <ArrowRight size={12} weight="bold" />
+          </div>
         </div>
       </div>
     </button>
