@@ -47,3 +47,11 @@ Kod hech qachon tasodifiy joyga yozilmaydi. Har bir o'zgarish o'zining qat'iy ma
 
 * **API Kalitlar:** Gemini API va boshqa maxfiy kalitlar **hech qachon frontendga qo'yilmaydi**. Ular faqat `services/backend/` orqali proksilanadi.
 * **Firebase:** Offline kesh va doimiy saqlash (`indexedDBLocalPersistence`) buzilmasligi shart.
+
+---
+
+## 6. 🛑 FAKTLAR VA HAQIQAT STANDARTI (No Premature Success — O'TA MUHIM)
+
+* **Kod yozilishi ≠ Ishning yakunlanishi:** Kodni faqat faylga yozib qo'yib, "hamma narsa 100% bitdi" deb asossiz xulosa berish **qat'iyan taqiqlanadi**.
+* **Deployment va Server holati:** Har qanday server (Firebase Functions, Cloud Build, Render) yoki ulanish o'zgarganda, real serverda `deploy` muvaffaqiyatli o'tmaguncha va javob olinmaguncha ish bitgan deb e'lon qilinmaydi.
+* **To'siqlar va Talablar:** Agar biror tashqi qadam (masalan, Firebase Billing / Blaze plan yoqish, karta ulash, API kalit kiritish) talab qilinsa, AI buni yashirmasdan, birinchi navbatda ro'y-rost foydalanuvchiga taqdim etishi shart.
