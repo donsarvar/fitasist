@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowRight, MapPin, CalendarDots, CheckCircle } from "@phosphor-icons/react";
+import { ArrowRight, MapPin, Mountains, Flag, ShieldCheck } from "@phosphor-icons/react";
 import { useFit } from "@/lib/fitasist/store";
 import { getNearestRegionalMarathon, getDaysLeft } from "../MarathonPage";
 
@@ -16,103 +16,115 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
 
   const daysLeft = getDaysLeft(next.date);
 
-  // Calculate training completion based on user challenges/workouts
-  const completedCount = (state.challenges || []).reduce(
-    (acc, c) => acc + (c.completedDays?.length || 0),
-    0
-  );
-  const targetWorkouts = 18;
-  const currentWorkouts = Math.min(targetWorkouts, Math.max(8, completedCount + 4));
-  const prepPct = Math.round((currentWorkouts / targetWorkouts) * 100);
-
   const badgeText =
-    lang === "ru" ? "СЛЕДУЮЩИЙ ВЫЗОВ" :
+    lang === "ru" ? "СЛЕДУЮЩИЙ МАРАФОН" :
     lang === "en" ? "NEXT CHALLENGE" :
-    "KEYINGI CHAQIRUV";
+    "ENG YAQIN MARAFON";
 
   const daysUnit =
     lang === "ru" ? "ДНЕЙ ДО СТАРТА" :
     lang === "en" ? "DAYS TO GO" :
     "KUN QOLDI";
 
-  const prepLabel =
-    lang === "ru" ? "ГОТОВНОСТЬ" :
-    lang === "en" ? "PREPARATION" :
-    "TAYYORGARLIK";
-
   const detailsLabel =
-    lang === "ru" ? "ПОДРОБНЕЕ" :
+    lang === "ru" ? "ПОДРОБНЕЕ О ТРАССЕ" :
     lang === "en" ? "RACE DETAILS" :
-    "BATAFSIL";
+    "MARSHRUT VA TAFSILOTLAR";
 
-  const workoutsLabel =
-    lang === "ru" ? `${currentWorkouts} / ${targetWorkouts} тренировок` :
-    lang === "en" ? `${currentWorkouts} / ${targetWorkouts} workouts completed` :
-    `${currentWorkouts} / ${targetWorkouts} ta mashg'ulot bajarildi`;
+  const elevationLabel =
+    lang === "ru" ? "НАБОР ВЫСОТЫ" :
+    lang === "en" ? "ELEVATION" :
+    "BALANDLIK";
 
   const name =
     lang === "ru" ? (next.nameRu || next.nameUz || next.name) :
     lang === "en" ? next.name :
     (next.nameUz || next.name);
 
-  // Dynamic image matching the marathon
-  const bgImage = next.image || "/marathons/skycamp.jpg";
+  // Background image based on the marathon
+  const bgImage = next.image || "/marathons/zaamin.jpg";
 
-  // SVG Ring calculation
-  const r = 32;
-  const circumference = 2 * Math.PI * r;
-  const strokeDashoffset = circumference - (circumference * prepPct) / 100;
+  // Date formatting
+  const formattedDate = new Date(next.date).toLocaleDateString(
+    lang === "ru" ? "ru-RU" : lang === "en" ? "en-US" : "uz-UZ",
+    { day: "numeric", month: "short", year: "numeric" }
+  );
 
   return (
     <button
       type="button"
       onClick={onOpenMarathons}
-      className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate shadow-hero border border-white/15 dark:border-white/10 active:scale-[0.98] transition-all group bg-[#0d1117] text-white"
+      className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate shadow-hero border border-white/15 dark:border-white/10 active:scale-[0.98] transition-all group bg-[#0a0d14] text-white"
     >
-      {/* Background Scenic Marathon Image */}
+      {/* Background High-Res Nature Scene */}
       <div className="absolute inset-0 z-0">
         <img
           src={bgImage}
           alt={name}
-          className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 opacity-65"
+          className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 opacity-60"
         />
-        {/* Cinematic Vignette Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#090b10] via-[#090b10]/60 to-[#090b10]/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#090b10]/80 via-transparent to-[#090b10]/60" />
+        {/* Cinematic Vignette Overlays for Perfect Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080a0f] via-[#080a0f]/60 to-[#080a0f]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#080a0f]/80 via-transparent to-[#080a0f]/70" />
       </div>
 
-      {/* Decorative Topographic Contour & Trail SVG */}
+      {/* Precise A to B Route SVG (Start A -> Mountain Peak Finish B) */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none z-[1] opacity-40"
+        className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
         viewBox="0 0 400 240"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        {/* Topography faint contour rings */}
         <path
-          d="M 180 160 C 230 145, 270 170, 290 120 C 310 70, 330 100, 355 55"
-          stroke="#7B5CFF"
+          d="M 200 40 C 270 30, 350 70, 380 130"
+          stroke="rgba(255, 255, 255, 0.08)"
+          strokeWidth="1"
+        />
+        <path
+          d="M 220 60 C 280 50, 340 85, 370 145"
+          stroke="rgba(255, 255, 255, 0.05)"
+          strokeWidth="1"
+        />
+
+        {/* Trail Route from Point A to Point B */}
+        <path
+          d="M 185 140 C 220 125, 250 150, 280 110 C 305 75, 325 95, 345 45"
+          stroke="#8B5CF6"
           strokeWidth="3"
           strokeDasharray="4 6"
           strokeLinecap="round"
         />
-        {/* Goal Flag on the Mountain Top */}
-        <circle cx="355" cy="55" r="4" fill="#38BDF8" />
-        <circle cx="355" cy="55" r="8" stroke="#38BDF8" strokeWidth="1.5" className="animate-ping" opacity="0.6" />
+
+        {/* Point A (Start Point) */}
+        <circle cx="185" cy="140" r="4" fill="#38BDF8" />
+        <text x="172" y="132" fill="#38BDF8" fontSize="8" fontWeight="800" fontFamily="sans-serif">START</text>
+
+        {/* Point B (Finish Peak with Flag) */}
+        <circle cx="345" cy="45" r="4" fill="#A855F7" />
+        <circle cx="345" cy="45" r="8" stroke="#A855F7" strokeWidth="1.5" className="animate-ping" opacity="0.6" />
+        <text x="338" y="32" fill="#E9D5FF" fontSize="11" fontWeight="bold" fontFamily="sans-serif">🏁</text>
       </svg>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="relative z-10 p-5 pb-4">
-        {/* Top Tag Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#5B4EFF] to-[#8C52FF] text-[10px] font-black tracking-wider uppercase text-white shadow-button">
-          <span>{badgeText}</span>
+        {/* Header Tag */}
+        <div className="flex items-center gap-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#5B4EFF] to-[#8C52FF] text-[10px] font-black tracking-wider uppercase text-white shadow-button">
+            <span>{badgeText}</span>
+          </div>
+          <span className="text-xs font-semibold text-white/75 flex items-center gap-1">
+            <ShieldCheck size={14} weight="fill" className="text-emerald-400" />
+            Rasmiy musobaqa
+          </span>
         </div>
 
-        {/* Title */}
-        <h3 className="mt-2.5 text-[20px] font-black text-white leading-tight tracking-tight drop-shadow-md">
+        {/* Marathon Title */}
+        <h3 className="mt-2.5 text-[21px] font-black text-white leading-tight tracking-tight drop-shadow-md">
           {name}
         </h3>
 
-        {/* Distance Pills */}
+        {/* Actual Distance Options */}
         <div className="mt-2.5 flex items-center gap-2 flex-wrap">
           {next.distances.map((d, idx) => {
             const isPrimary = idx === 0 || (next.distances.length === 1);
@@ -131,12 +143,12 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           })}
         </div>
 
-        {/* Middle Stats Grid: Days Left + Preparation Ring */}
-        <div className="mt-4 flex items-center justify-between gap-4">
-          {/* Left: Big Days Countdown */}
+        {/* Middle Stats: Days Left Countdown & Actual Elevation / Terrain */}
+        <div className="mt-4 flex items-end justify-between gap-4">
+          {/* Left: Days Countdown */}
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-[42px] font-black leading-none bg-gradient-to-br from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent drop-shadow-sm">
+              <span className="text-[44px] font-black leading-none bg-gradient-to-br from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">
                 {daysLeft}
               </span>
               <div className="flex flex-col">
@@ -152,62 +164,30 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
                 {next.city}, {next.country}
               </span>
               <span className="text-white/40">•</span>
-              <span>{next.date}</span>
+              <span>{formattedDate}</span>
             </div>
           </div>
 
-          {/* Right: Circular Preparation Indicator */}
-          <div className="relative shrink-0 flex flex-col items-center justify-center">
-            <div className="relative w-[78px] h-[78px]">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
-                <defs>
-                  <linearGradient id="prepGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#38BDF8" />
-                    <stop offset="100%" stopColor="#7B5CFF" />
-                  </linearGradient>
-                </defs>
-                {/* Background Ring */}
-                <circle
-                  cx="40"
-                  cy="40"
-                  r={r}
-                  fill="none"
-                  stroke="rgba(255, 255, 255, 0.12)"
-                  strokeWidth="6"
-                />
-                {/* Progress Ring */}
-                <circle
-                  cx="40"
-                  cy="40"
-                  r={r}
-                  fill="none"
-                  stroke="url(#prepGrad)"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={strokeDashoffset}
-                  className="transition-all duration-1000 ease-out"
-                />
-              </svg>
-              {/* Inner Text */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-[15px] font-black text-white leading-none">
-                  {prepPct}%
-                </span>
-                <span className="text-[7px] font-extrabold text-white/70 uppercase tracking-tight mt-0.5">
-                  {prepLabel}
-                </span>
-              </div>
+          {/* Right: Actual Technical Elevation Badge (Real Data, no fake %) */}
+          {next.elevationGain && (
+            <div className="shrink-0 flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.08] backdrop-blur-md border border-white/15 min-w-[84px] text-center">
+              <Mountains size={18} weight="fill" className="text-[#38BDF8]" />
+              <span className="text-[13px] font-black text-white mt-1 leading-tight">
+                {next.elevationGain}
+              </span>
+              <span className="text-[8px] font-extrabold text-white/60 uppercase tracking-tight mt-0.5">
+                {elevationLabel}
+              </span>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Bottom Workout Strip Bar */}
+      {/* Bottom Real Race Details Strip */}
       <div className="relative z-10 mx-3 mb-3 p-3 rounded-2xl bg-white/[0.08] backdrop-blur-xl border border-white/10 flex items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 text-white/90 font-medium text-[11px] truncate">
-          <CheckCircle size={15} weight="fill" className="text-[#38BDF8] shrink-0" />
-          <span className="truncate">{workoutsLabel}</span>
+        <div className="flex items-center gap-1.5 text-white/90 font-semibold text-[11px]">
+          <Flag size={14} weight="fill" className="text-amber-400" />
+          <span>Trassa: {next.terrain || "Tog'li & Shahar"}</span>
         </div>
         <div className="shrink-0 flex items-center gap-1 text-[11px] font-black text-indigo-300 uppercase tracking-wide group-hover:text-white group-hover:translate-x-0.5 transition-all">
           <span>{detailsLabel}</span>
