@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowRight, MapPin } from "@phosphor-icons/react";
+import { ArrowRight, MapPin, CalendarBlank } from "@phosphor-icons/react";
 import { useFit } from "@/lib/fitasist/store";
 import { getNearestRegionalMarathon, getDaysLeft } from "../MarathonPage";
 
@@ -19,17 +19,17 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
   const badgeText =
     lang === "ru" ? "СЛЕДУЮЩИЙ МАРАФОН" :
     lang === "en" ? "NEXT CHALLENGE" :
-    "KEYINGI CHAQIRUV";
+    "NEXT CHALLENGE";
 
   const daysUnit =
-    lang === "ru" ? "ДНЕЙ ДО СТАРТА" :
+    lang === "ru" ? "DAYS TO GO" :
     lang === "en" ? "DAYS TO GO" :
-    "KUN QOLDI";
+    "DAYS TO GO";
 
   const detailsLabel =
-    lang === "ru" ? "Подробнее" :
-    lang === "en" ? "Race Details" :
-    "Batafsil";
+    lang === "ru" ? "RACE DETAILS" :
+    lang === "en" ? "RACE DETAILS" :
+    "RACE DETAILS";
 
   const name =
     lang === "ru" ? (next.nameRu || next.nameUz || next.name) :
@@ -37,75 +37,91 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
     (next.nameUz || next.name);
 
   // Background image based on the marathon
-  const bgImage = next.image || "/marathons/zaamin.jpg";
+  const bgImage = next.image || "/marathons/skycamp.jpg";
 
   // Formatted Date
   const formattedDate = new Date(next.date).toLocaleDateString(
     lang === "ru" ? "ru-RU" : lang === "en" ? "en-US" : "uz-UZ",
-    { day: "numeric", month: "short" }
+    { day: "2-digit", month: "short", year: "numeric" }
   );
 
   return (
     <button
       type="button"
       onClick={onOpenMarathons}
-      className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate shadow-hero border border-white/15 dark:border-white/10 active:scale-[0.98] transition-all group bg-[#090c13] text-white p-5"
+      className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate bg-white dark:bg-[#12141c] border border-slate-100 dark:border-white/5 shadow-card active:scale-[0.98] transition-all group p-5 pb-4 text-slate-900 dark:text-white"
     >
-      {/* Background Scenic Marathon Image */}
-      <div className="absolute inset-0 z-0">
+      {/* Right-Aligned Scenic Nature Scene with Multi-Stop Left Gradient Fade */}
+      <div className="absolute top-0 right-0 bottom-0 w-[65%] pointer-events-none z-0 overflow-hidden">
         <img
           src={bgImage}
           alt={name}
-          className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 opacity-55"
+          className="w-full h-full object-cover object-right scale-105 group-hover:scale-110 transition-transform duration-700 opacity-85 dark:opacity-40"
         />
-        {/* Soft Contrast Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080a0f] via-[#080a0f]/60 to-[#080a0f]/30" />
+        {/* Soft Multi-Stop Gradient Blend to Match Card Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent dark:from-[#12141c] dark:via-[#12141c]/85 dark:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-transparent to-transparent dark:from-[#12141c]/95 dark:via-transparent dark:to-transparent" />
       </div>
 
-      {/* Clean A-to-B Route Line to the Mountain Peak */}
+      {/* Topographic Route Trail from Left to the Peak on Right */}
       <svg
-        className="absolute right-4 bottom-14 w-44 h-24 pointer-events-none z-[1]"
-        viewBox="0 0 180 100"
+        className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+        viewBox="0 0 380 190"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        {/* Topo faint contour lines */}
         <path
-          d="M 10 85 C 50 80, 70 50, 110 55 C 135 60, 145 35, 165 15"
-          stroke="#8B5CF6"
+          d="M 230 15 C 280 10, 330 40, 355 90"
+          stroke="rgba(99, 102, 241, 0.12)"
+          strokeWidth="1"
+        />
+        <path
+          d="M 250 30 C 290 25, 325 50, 345 100"
+          stroke="rgba(99, 102, 241, 0.08)"
+          strokeWidth="1"
+        />
+
+        {/* Trail Route */}
+        <path
+          d="M 160 135 C 190 128, 205 145, 235 110 C 260 80, 275 95, 295 55"
+          stroke="#6366F1"
           strokeWidth="2.5"
           strokeDasharray="4 5"
           strokeLinecap="round"
         />
-        {/* Point A (Start) */}
-        <circle cx="10" cy="85" r="3.5" fill="#38BDF8" />
-        {/* Point B (Finish Peak Flag) */}
-        <circle cx="165" cy="15" r="4" fill="#A855F7" />
-        <text x="156" y="8" fontSize="13">🏁</text>
+
+        {/* Start Point */}
+        <circle cx="160" cy="135" r="3.5" fill="#38BDF8" />
+
+        {/* Peak Finish Flag */}
+        <circle cx="295" cy="55" r="3.5" fill="#6366F1" />
+        <text x="290" y="42" fontSize="13">🚩</text>
       </svg>
 
-      {/* Main Content */}
+      {/* Main Content (Left Aligned, Clean & Legible) */}
       <div className="relative z-10">
         {/* Top Tag Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#6355FF] text-[10px] font-black tracking-wider uppercase text-white shadow-button">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#5850EC] text-[10px] font-black tracking-wider uppercase text-white shadow-xs">
           <span>{badgeText}</span>
         </div>
 
         {/* Marathon Title */}
-        <h3 className="mt-2.5 text-[22px] font-black text-white leading-tight tracking-tight drop-shadow-md">
+        <h3 className="mt-2 text-[20px] font-black text-slate-900 dark:text-white leading-tight tracking-tight max-w-[75%]">
           {name}
         </h3>
 
         {/* Distance Pills */}
-        <div className="mt-2.5 flex items-center gap-2 flex-wrap">
+        <div className="mt-2 flex items-center gap-1.5 flex-wrap">
           {next.distances.map((d, idx) => {
             const isPrimary = idx === 0 || (next.distances.length === 1);
             return (
               <span
                 key={d}
-                className={`px-3 py-1 rounded-xl text-[11px] font-extrabold transition-all ${
+                className={`px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold transition-all ${
                   isPrimary
-                    ? "bg-[#6355FF] text-white shadow-button ring-1 ring-white/30"
-                    : "bg-white/10 backdrop-blur-md text-white/90 border border-white/15"
+                    ? "bg-[#6366F1] text-white shadow-xs"
+                    : "bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white/90 border border-slate-200/60 dark:border-white/10"
                 }`}
               >
                 {d}
@@ -114,27 +130,33 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           })}
         </div>
 
-        {/* Countdown & Info */}
-        <div className="mt-4 flex items-end justify-between gap-3">
+        {/* Big Days Countdown & Location Info */}
+        <div className="mt-3.5 flex items-end justify-between gap-2">
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-[40px] font-black leading-none bg-gradient-to-br from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">
+              <span className="text-[38px] font-black leading-none text-[#4F46E5] dark:text-[#818CF8] tracking-tight">
                 {daysLeft}
               </span>
-              <span className="text-[10px] font-black tracking-widest text-indigo-300 uppercase leading-none">
+              <span className="text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-400 uppercase leading-none">
                 {daysUnit}
               </span>
             </div>
-            <div className="mt-2 flex items-center gap-1.5 text-[11px] font-medium text-white/80">
-              <MapPin size={12} weight="fill" className="text-[#38BDF8]" />
-              <span>{next.city}</span>
-              <span className="text-white/40">•</span>
-              <span>{formattedDate}</span>
+            {/* Location & Date */}
+            <div className="mt-1.5 flex items-center gap-2 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+              <span className="flex items-center gap-1">
+                <MapPin size={11} weight="fill" className="text-[#6366F1]" />
+                {next.city}
+              </span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span className="flex items-center gap-1">
+                <CalendarBlank size={11} weight="bold" />
+                {formattedDate}
+              </span>
             </div>
           </div>
 
-          {/* Clean Glassmorphic Pill Action Button */}
-          <div className="px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center gap-1.5 text-[11px] font-bold text-white group-hover:bg-[#6355FF] transition-all">
+          {/* Clean Right Action Link */}
+          <div className="flex items-center gap-1 text-[11px] font-extrabold text-[#4F46E5] dark:text-[#818CF8] group-hover:translate-x-0.5 transition-all">
             <span>{detailsLabel}</span>
             <ArrowRight size={12} weight="bold" />
           </div>
