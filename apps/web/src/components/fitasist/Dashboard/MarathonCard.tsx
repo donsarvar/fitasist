@@ -55,6 +55,9 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
     lang === "en" ? next.name :
     (next.nameUz || next.name);
 
+  // Dynamic image matching the marathon
+  const bgImage = next.image || "/marathons/skycamp.jpg";
+
   // SVG Ring calculation
   const r = 32;
   const circumference = 2 * Math.PI * r;
@@ -66,10 +69,10 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
       onClick={onOpenMarathons}
       className="mt-4 w-full text-left rounded-[32px] overflow-hidden relative isolate shadow-hero border border-white/15 dark:border-white/10 active:scale-[0.98] transition-all group bg-[#0d1117] text-white"
     >
-      {/* Background Mountain Trail Scene */}
+      {/* Background Scenic Marathon Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/marathons/zaamin_clean.jpg"
+          src={bgImage}
           alt={name}
           className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 opacity-65"
         />
@@ -112,7 +115,7 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
         {/* Distance Pills */}
         <div className="mt-2.5 flex items-center gap-2 flex-wrap">
           {next.distances.map((d, idx) => {
-            const isPrimary = idx === 1 || (next.distances.length === 1);
+            const isPrimary = idx === 0 || (next.distances.length === 1);
             return (
               <span
                 key={d}
@@ -149,7 +152,7 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
                 {next.city}, {next.country}
               </span>
               <span className="text-white/40">•</span>
-              <span>06 Sentabr, 2026</span>
+              <span>{next.date}</span>
             </div>
           </div>
 
