@@ -1,11 +1,13 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, indexedDBLocalPersistence, initializeAuth } from "firebase/auth";
 import {
-  initializeFirestore,
-  getFirestore,
-  persistentLocalCache,
-  persistentSingleTabManager,
-} from "firebase/firestore";
+  getAuth,
+  GoogleAuthProvider,
+  browserLocalPersistence,
+  indexedDBLocalPersistence,
+  initializeAuth,
+  setPersistence,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { Capacitor } from "@capacitor/core";
 
@@ -19,40 +21,33 @@ const firebaseConfig = {
   measurementId: "G-E4GV4M5FTB",
 };
 
-// Initialize Firebase safely — one instance for the entire page lifetime
-const isFirstInit = getApps().length === 0;
-const app = isFirstInit ? initializeApp(firebaseConfig) : getApp();
+// Initialize Firebase App singleton
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Auth:
-// - First time + native platform: use indexedDBLocalPersistence (session saqlanadi)
-// - Otherwise: getAuth() returns already-initialized instance
+// Initialize Auth with cross-platform persistence
 export const auth = (() => {
-  if (isFirstInit && Capacitor.isNativePlatform()) {
-    return initializeAuth(app, {
-      persistence: indexedDBLocalPersistence,
-    });
+  const isFirst = getApps().length === 1;
+  if (isFirst && Capacitor.isNativePlatform()) {
+    try {
+      return initializeAuth(app, {
+        persistence: indexedDBLocalPersistence,
+      });
+    } catch {
+      return getAuth(app);
+    }
   }
-  return getAuth(app);
+  const a = getAuth(app);
+  if (!Capacitor.isNativePlatform()) {
+    setPersistence(a, browserLocalPersistence).catch(() => {});
+  }
+  return a;
 })();
 
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: "select_account",
+});
 
-// Module-level singleton guard — prevents "Database is closing/hidden" error
-let _db: ReturnType<typeof getFirestore> | null = null;
-
-function getDb() {
-  if (_db) return _db;
-  try {
-    _db = initializeFirestore(app, {
-      localCache: persistentLocalCache({
-        tabManager: persistentSingleTabManager({ forceOwnership: true }),
-      }),
-    });
-  } catch {
-    _db = getFirestore(app);
-  }
-  return _db;
-}
-
-export const db = getDb();
+// Firestore singleton instance
+export const db = getFirestore(app);
 export const storage = getStorage(app);
