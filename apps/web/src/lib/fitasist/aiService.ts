@@ -1,7 +1,7 @@
 import type { UserProfile, ChatMessage } from "./types";
+import { BACKEND_URL } from "./config";
 
 export function pingAIServer() {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
   fetch(`${BACKEND_URL}/health`, { mode: "no-cors" }).catch(() => {});
 }
 
@@ -113,7 +113,6 @@ async function callBackendProxy(
   systemPrompt: string,
   signal?: AbortSignal
 ): Promise<string> {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
   const fetchUrl = `${BACKEND_URL}/api/chat`;
   const fetchSignal = signal || AbortSignal.timeout(25000);
 

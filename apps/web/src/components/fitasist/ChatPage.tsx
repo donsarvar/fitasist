@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/fitasist/config";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useFit } from "@/lib/fitasist/store";
 import { askAICoach } from "@/lib/fitasist/aiService";
@@ -245,7 +246,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
     if (textareaRef.current) textareaRef.current.style.height = "auto";
 
     // 4. Notify Telegram Admin Bot (non-blocking)
-    fetch("https://fitasist-backend-service.onrender.com/api/notify-admin", {
+    fetch(`${BACKEND_URL}/notify-admin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -267,7 +268,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
       };
 
       // Notify Telegram Admin Bot
-      fetch("https://fitasist-backend-service.onrender.com/api/notify-admin", {
+      fetch(`${BACKEND_URL}/notify-admin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

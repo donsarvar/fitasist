@@ -5,7 +5,8 @@
   "description": "FitAsist - Fitness & AI Assistant Full-Stack Monorepo Platform",
   "workspaces": [
     "apps/*",
-    "services/*"
+    "services/*",
+    "functions"
   ],
   "scripts": {
     "dev:web": "npm --workspace=apps/web run dev",
@@ -13,7 +14,8 @@
     "dev:backend": "npm --workspace=services/backend run dev",
     "build:web": "npm --workspace=apps/web run build",
     "build:mobile": "npm --workspace=apps/mobile run build",
-    "build:backend": "npm --workspace=services/backend run build"
+    "build:backend": "npm --workspace=services/backend run build",
+    "build:functions": "npm --workspace=functions run build"
   },
   "keywords": [
     "fitasist",

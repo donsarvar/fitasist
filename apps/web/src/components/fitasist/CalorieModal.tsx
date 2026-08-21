@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/fitasist/config";
 import { useState, useRef, useMemo } from "react";
 import { useFit } from "@/lib/fitasist/store";
 import { FOOD_DATABASE } from "@/lib/fitasist/foodData";
@@ -253,7 +254,7 @@ export function CalorieModal({ onClose }: Props) {
         const base64String = (reader.result as string).split(",")[1];
         
         // Prepare Vision prompt for Gemini API
-        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://fitasist-backend-service.onrender.com";
+        // using centralized BACKEND_URL
         const prompt = `Rasmda ko'ringan taomni tahlil qiling va faqat ushbu sof JSON formatida javob bering (boshqa hech qanday text yozmang):
 {
   "name": "Taom nomi o'zbek tilida",

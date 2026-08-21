@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/fitasist/config";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Ruler, Weight as WeightIcon, User2, Activity, Dumbbell, Sofa, Trophy } from "lucide-react";
 import { useFit } from "@/lib/fitasist/store";
@@ -52,7 +53,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
       update({ profile: newProfile });
 
       // Notify Telegram Admin Bot
-      fetch("https://fitasist-backend-service.onrender.com/api/notify-admin", {
+      fetch(`${BACKEND_URL}/notify-admin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
