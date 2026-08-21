@@ -1,4 +1,5 @@
 // FitAsist Central Configuration
+// Live backend is active on Render until Firebase Blaze plan is activated
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL ||
-  "https://us-central1-fitasist-428cc.cloudfunctions.net/api";
+  "https://fitasist-backend-service.onrender.com";
