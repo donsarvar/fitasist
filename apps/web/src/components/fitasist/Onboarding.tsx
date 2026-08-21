@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "@/lib/fitasist/config";
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Ruler, Weight as WeightIcon, User2, Activity, Dumbbell, Sofa, Trophy } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Ruler, Scales as WeightIcon, User as User2, Heartbeat as Activity, Barbell as Dumbbell, Armchair as Sofa, Trophy } from "@phosphor-icons/react";
 import { useFit } from "@/lib/fitasist/store";
 import type { ActivityLevel, BodyType, Gender, Language } from "@/lib/fitasist/types";
 
@@ -253,8 +253,67 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
           {step === 2 && (
             <StepShell title={t("gender")} subtitle={t("genderSub")}>
               <div className="grid grid-cols-2 gap-4">
-                <ChoiceCard active={gender === "male"} onClick={() => setGender("male")} icon={<User2 className="h-8 w-8" />} label={t("male")} tint="blue" />
-                <ChoiceCard active={gender === "female"} onClick={() => setGender("female")} icon={<User2 className="h-8 w-8" />} label={t("female")} tint="pink" />
+                {/* Male Card */}
+                <button
+                  type="button"
+                  onClick={() => setGender("male")}
+                  className={`relative rounded-3xl border p-4 flex flex-col items-center justify-between transition-all overflow-hidden ${
+                    gender === "male"
+                      ? "border-brand bg-gradient-to-b from-brand/10 via-surface to-surface shadow-hero ring-2 ring-brand/20 scale-[1.02]"
+                      : "border-border/70 dark:border-border/20 bg-surface shadow-soft hover:border-brand/40 active:scale-[0.98]"
+                  }`}
+                >
+                  <div className="w-full h-44 flex items-center justify-center p-1 relative">
+                    {gender === "male" && (
+                      <div className="absolute inset-0 bg-brand/15 blur-xl rounded-full pointer-events-none" />
+                    )}
+                    <img
+                      src="/body_types/male_mesomorph.png"
+                      alt={t("male")}
+                      className="h-full max-w-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="mt-3 text-center relative z-10">
+                    <div className="text-base font-extrabold text-text-primary">{t("male")}</div>
+                    <div className="text-[11px] font-semibold text-text-muted mt-0.5">Erkak / Male</div>
+                  </div>
+                  {gender === "male" && (
+                    <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full gradient-primary text-white shadow-xs z-20">
+                      <Check className="h-3.5 w-3.5" weight="bold" />
+                    </div>
+                  )}
+                </button>
+
+                {/* Female Card */}
+                <button
+                  type="button"
+                  onClick={() => setGender("female")}
+                  className={`relative rounded-3xl border p-4 flex flex-col items-center justify-between transition-all overflow-hidden ${
+                    gender === "female"
+                      ? "border-pink-500 bg-gradient-to-b from-pink-500/10 via-surface to-surface shadow-hero ring-2 ring-pink-500/20 scale-[1.02]"
+                      : "border-border/70 dark:border-border/20 bg-surface shadow-soft hover:border-pink-500/40 active:scale-[0.98]"
+                  }`}
+                >
+                  <div className="w-full h-44 flex items-center justify-center p-1 relative">
+                    {gender === "female" && (
+                      <div className="absolute inset-0 bg-pink-500/15 blur-xl rounded-full pointer-events-none" />
+                    )}
+                    <img
+                      src="/body_types/female_mesomorph.png"
+                      alt={t("female")}
+                      className="h-full max-w-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="mt-3 text-center relative z-10">
+                    <div className="text-base font-extrabold text-text-primary">{t("female")}</div>
+                    <div className="text-[11px] font-semibold text-text-muted mt-0.5">Ayol / Female</div>
+                  </div>
+                  {gender === "female" && (
+                    <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full bg-pink-500 text-white shadow-xs z-20">
+                      <Check className="h-3.5 w-3.5" weight="bold" />
+                    </div>
+                  )}
+                </button>
               </div>
             </StepShell>
           )}
