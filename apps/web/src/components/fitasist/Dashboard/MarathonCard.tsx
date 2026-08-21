@@ -9,7 +9,7 @@ interface Props {
 export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Props) {
   const { state } = useFit();
   const lang = state.profile?.language || "uz";
-  const next = getNearestRegionalMarathon();
+  const next = getNearestRegionalMarathon(lang);
 
   if (!next) return null;
 

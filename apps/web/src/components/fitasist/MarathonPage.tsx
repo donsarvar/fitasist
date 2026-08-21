@@ -198,7 +198,12 @@ export function getDaysLeft(dateStr: string): number {
   return Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-export function getUserUserRegion(): "uzbekistan" | "asia" | "europe" | "americas" | "middleeast" {
+export function getUserUserRegion(lang?: string): "uzbekistan" | "asia" | "europe" | "americas" | "middleeast" {
+  // If user interface language is Uzbek, prioritize Uzbekistan marathons
+  if (lang === "uz" || !lang) {
+    return "uzbekistan";
+  }
+
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
     if (tz.includes("Tashkent") || tz.includes("Samarkand") || tz.includes("Asia/Tashkent")) {
@@ -214,25 +219,33 @@ export function getUserUserRegion(): "uzbekistan" | "asia" | "europe" | "america
   return "uzbekistan";
 }
 
-export function getNearestRegionalMarathon(): Marathon | null {
-  const userRegion = getUserUserRegion();
+export function getNearestRegionalMarathon(lang?: string): Marathon | null {
+  const userRegion = getUserUserRegion(lang);
   const upcoming = MARATHONS.filter((m) => getDaysLeft(m.date) > 0);
 
-  // 1. Regional match
-  const inUserRegion = upcoming.filter((m) => m.region === userRegion || (userRegion === "uzbekistan" && m.region === "asia")).sort(
+  // 1. If user is in Uzbekistan or language is Uzbek -> strictly pick Uzbekistan marathon first
+  if (userRegion === "uzbekistan" || lang === "uz" || !lang) {
+    const uzbUpcoming = upcoming.filter((m) => m.region === "uzbekistan").sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    if (uzbUpcoming.length > 0) return uzbUpcoming[0];
+  }
+
+  // 2. Otherwise match user's region
+  const inUserRegion = upcoming.filter((m) => m.region === userRegion).sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
   if (inUserRegion.length > 0) return inUserRegion[0];
 
-  // 2. Global nearest
+  // 3. Global nearest
   const sorted = upcoming.sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
   return sorted[0] ?? null;
 }
 
-export function getNextMarathon(): Marathon | null {
-  return getNearestRegionalMarathon();
+export function getNextMarathon(lang?: string): Marathon | null {
+  return getNearestRegionalMarathon(lang);
 }
 
 function formatDate(dateStr: string, lang: string): string {
