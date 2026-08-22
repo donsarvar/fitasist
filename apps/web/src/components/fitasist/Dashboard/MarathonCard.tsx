@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowRight, MapPin, CalendarBlank } from "@phosphor-icons/react";
+import { ArrowRight, CalendarBlank } from "@phosphor-icons/react";
 import { useFit } from "@/lib/fitasist/store";
 import { getNearestRegionalMarathon, getDaysLeft } from "../MarathonPage";
 
@@ -34,7 +34,7 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
   // Background scenic mountain image
   const bgImage = next.image || "/marathons/skycamp.jpg";
 
-  // Formatted localized date (e.g., "5-sen, 2026")
+  // Formatted localized date (e.g., "5-sentabr, 2026")
   const formattedDate = new Date(next.date).toLocaleDateString(
     lang === "ru" ? "ru-RU" : lang === "en" ? "en-US" : "uz-UZ",
     { day: "numeric", month: "short", year: "numeric" }
@@ -59,17 +59,10 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
 
       {/* Main Content Layout */}
       <div className="relative z-10">
-        {/* Top Header Row: Title on Left, Batafsil Pill on Top Right Corner */}
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-[21px] font-black text-slate-900 dark:text-white leading-tight tracking-tight max-w-[72%] drop-shadow-xs">
-            {name}
-          </h3>
-
-          <div className="px-3.5 py-1.5 rounded-2xl bg-white/90 dark:bg-white/15 backdrop-blur-md border border-slate-200/80 dark:border-white/20 shadow-xs flex items-center gap-1.5 text-[11px] font-extrabold text-[#4F46E5] dark:text-white group-hover:bg-[#5850EC] group-hover:text-white transition-all shrink-0">
-            <span>{detailsLabel}</span>
-            <ArrowRight size={12} weight="bold" />
-          </div>
-        </div>
+        {/* Top Header: Full Width Prominent Title */}
+        <h3 className="text-[21px] font-black text-slate-900 dark:text-white leading-tight tracking-tight drop-shadow-xs max-w-[85%]">
+          {name}
+        </h3>
 
         {/* Distance Pills */}
         <div className="mt-3 flex items-center gap-2 flex-wrap">
@@ -90,27 +83,32 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           })}
         </div>
 
-        {/* Bottom Section: Big Countdown on Left, Crisp Localized Location & Date on Right */}
-        <div className="mt-5 flex items-end justify-between gap-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[38px] font-black leading-none text-[#4F46E5] dark:text-[#818CF8] tracking-tight">
-              {daysLeft}
-            </span>
-            <span className="text-[11px] font-black tracking-wider text-slate-600 dark:text-slate-400 uppercase leading-none">
-              {daysUnit}
-            </span>
+        {/* Bottom Row: Countdown & Date on Left, Batafsil Button on Bottom Right */}
+        <div className="mt-5 flex items-end justify-between gap-3">
+          <div className="flex items-center gap-3">
+            {/* Countdown */}
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[38px] font-black leading-none text-[#4F46E5] dark:text-[#818CF8] tracking-tight">
+                {daysLeft}
+              </span>
+              <span className="text-[10px] font-black tracking-wider text-slate-500 dark:text-slate-400 uppercase leading-none">
+                {daysUnit}
+              </span>
+            </div>
+
+            <span className="text-slate-300 dark:text-slate-600 font-bold">•</span>
+
+            {/* Date Badge */}
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">
+              <CalendarBlank size={14} weight="bold" className="text-[#5850EC] shrink-0" />
+              <span>{formattedDate}</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 text-[11px] font-bold text-slate-800 dark:text-slate-100 bg-white/70 dark:bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/60 dark:border-white/10 shadow-2xs whitespace-nowrap">
-            <span className="flex items-center gap-1">
-              <MapPin size={13} weight="fill" className="text-[#5850EC] shrink-0" />
-              <span>{next.city}</span>
-            </span>
-            <span className="text-slate-300 dark:text-slate-600">•</span>
-            <span className="flex items-center gap-1">
-              <CalendarBlank size={13} weight="bold" className="shrink-0" />
-              <span>{formattedDate}</span>
-            </span>
+          {/* Bottom Right: Batafsil Action Pill */}
+          <div className="px-4 py-2 rounded-2xl bg-white/90 dark:bg-white/15 backdrop-blur-md border border-slate-200/80 dark:border-white/20 shadow-xs flex items-center gap-1.5 text-[11px] font-extrabold text-[#4F46E5] dark:text-white group-hover:bg-[#5850EC] group-hover:text-white transition-all shrink-0">
+            <span>{detailsLabel}</span>
+            <ArrowRight size={12} weight="bold" />
           </div>
         </div>
       </div>
