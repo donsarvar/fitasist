@@ -480,7 +480,7 @@ export function CalorieModal({ onClose }: Props) {
                           }}
                           className="grid h-7 w-7 place-items-center rounded-full bg-white dark:bg-[#1e202e] text-brand border border-border/20 shadow-soft"
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus size={16} />
                         </button>
                       </div>
 
@@ -550,7 +550,7 @@ export function CalorieModal({ onClose }: Props) {
                   className="rounded-2xl bg-surface border border-border p-4 text-left shadow-soft hover:border-brand transition-all group flex flex-col justify-between h-32"
                 >
                   <div className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand group-hover:scale-105 transition-transform">
-                    <ShoppingBag className="h-5 w-5" />
+                    <ShoppingBag size={20} />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-text-primary">🛒 Menyu & Savat</div>
@@ -563,7 +563,7 @@ export function CalorieModal({ onClose }: Props) {
                   className="rounded-2xl bg-surface border border-border p-4 text-left shadow-soft hover:border-purple-500 transition-all group flex flex-col justify-between h-32"
                 >
                   <div className="grid h-10 w-10 place-items-center rounded-xl bg-purple-500/10 text-purple-500 group-hover:scale-105 transition-transform">
-                    <Camera className="h-5 w-5" />
+                    <Camera size={20} />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-text-primary">📸 AI Rasm Tahlili</div>
@@ -576,7 +576,7 @@ export function CalorieModal({ onClose }: Props) {
                   className="rounded-2xl bg-surface border border-border p-4 text-left shadow-soft hover:border-emerald-500 transition-all group flex flex-col justify-between h-32"
                 >
                   <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:scale-105 transition-transform">
-                    <Edit3 className="h-5 w-5" />
+                    <Edit3 size={20} />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-text-primary">✏️ Qo'lda kiritish</div>
@@ -593,7 +593,7 @@ export function CalorieModal({ onClose }: Props) {
                   className="rounded-2xl bg-surface border border-border p-4 text-left shadow-soft hover:border-amber-500 transition-all group flex flex-col justify-between h-32"
                 >
                   <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-500/10 text-amber-500 group-hover:scale-105 transition-transform">
-                    <Sparkles className="h-5 w-5" />
+                    <Sparkles size={20} />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-text-primary">💬 AI ga aytish</div>
@@ -761,7 +761,7 @@ export function CalorieModal({ onClose }: Props) {
               {/* AI Complex Analysis Card */}
               <div className="rounded-2xl bg-surface border border-brand/30 p-4 shadow-soft space-y-3">
                 <div className="flex items-center gap-2 text-brand font-bold text-xs">
-                  <Sparkles className="h-4 w-4" />
+                  <Sparkles size={16} />
                   <span>AI Tahlili va Makrolar</span>
                 </div>
 
@@ -815,7 +815,7 @@ export function CalorieModal({ onClose }: Props) {
                 ) : (
                   <div className="text-center p-4">
                     <div className="grid h-12 w-12 place-items-center rounded-2xl bg-purple-500/10 text-purple-500 mx-auto mb-2">
-                      <Camera className="h-6 w-6" />
+                      <Camera size={24} />
                     </div>
                     <div className="text-xs font-bold text-text-primary">Rasmga olish yoki fayl tanlash</div>
                     <div className="text-[10px] text-text-muted mt-0.5">Kamera tugmasini bosing</div>
@@ -825,7 +825,7 @@ export function CalorieModal({ onClose }: Props) {
 
               {analyzingPhoto && (
                 <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-500 text-xs font-bold flex items-center justify-center gap-2 animate-pulse">
-                  <Sparkles className="h-4 w-4" />
+                  <Sparkles size={16} />
                   Gemini AI rasm va kaloriyani tahlil qilmoqda...
                 </div>
               )}
@@ -866,7 +866,7 @@ export function CalorieModal({ onClose }: Props) {
                     onClick={savePhotoResult}
                     className="w-full h-12 rounded-xl bg-purple-500 text-white font-bold text-xs shadow-button flex items-center justify-center gap-2 hover:opacity-95"
                   >
-                    <Check className="h-4 w-4" />
+                    <Check size={16} />
                     Jurnalga Saqlash
                   </button>
                 </div>
@@ -939,7 +939,7 @@ export function CalorieModal({ onClose }: Props) {
                 disabled={!manualName.trim()}
                 className="w-full h-12 rounded-xl bg-emerald-500 text-white font-bold text-xs shadow-button flex items-center justify-center gap-2 hover:opacity-95 disabled:opacity-50 mt-4"
               >
-                <Check className="h-4 w-4" />
+                <Check size={16} />
                 Saqlash
               </button>
             </div>

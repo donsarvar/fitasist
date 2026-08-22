@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, CaretDown, Lightning, FastForward as FastForwardIcon, Database as DatabaseIcon } from "@phosphor-icons/react";
+import { Notification, ArrowDown2, Flash, ForwardItem as FastForwardIcon, Data as DatabaseIcon } from "iconsax-react";
 import { useFit } from "@/lib/fitasist/store";
 import { t } from "@/lib/fitasist/translations";
 
@@ -43,12 +43,12 @@ export function DevPanel() {
         <div className="rounded-3xl bg-surface shadow-card border border-border p-4 animate-fade-in">
           <div className="flex items-center justify-between">
             <div className="text-xs font-bold text-text-primary">Dasturchi sinov paneli</div>
-            <button onClick={() => setOpen(false)} className="text-text-muted"><CaretDown size={16} weight="bold" /></button>
+            <button onClick={() => setOpen(false)} className="text-text-muted"><ArrowDown2 size={16} variant="Linear" /></button>
           </div>
           <div className="mt-3 space-y-2">
-            <DevBtn onClick={fastForward} icon={<FastForwardIcon size={16} weight="bold" />} title="1 kun oldinga surish" sub="Keyingi kunni simulyatsiya qilish" />
-            <DevBtn onClick={simulate} icon={<Bell size={16} weight="bold" />} title="Xabarnomalarni yuborish" sub="Barcha bildirishnomalarni chiqarish" />
-            <DevBtn onClick={fillMock} icon={<DatabaseIcon size={16} weight="bold" />} title="Test ma'lumotlarini to'ldirish" sub="30 kunlik o'lchov yaratish" />
+            <DevBtn onClick={fastForward} icon={<FastForwardIcon size={16} variant="Bold" />} title="1 kun oldinga surish" sub="Keyingi kunni simulyatsiya qilish" />
+            <DevBtn onClick={simulate} icon={<Notification size={16} variant="Bold" />} title="Xabarnomalarni yuborish" sub="Barcha bildirishnomalarni chiqarish" />
+            <DevBtn onClick={fillMock} icon={<DatabaseIcon size={16} variant="Bold" />} title="Test ma'lumotlarini to'ldirish" sub="30 kunlik o'lchov yaratish" />
           </div>
           <div className="mt-3 pt-3 border-t border-divider text-[10px] text-text-muted">
             Simulyatsiya sanasi: {currentDate.toLocaleDateString("uz-UZ", { month: "short", day: "numeric", year: "numeric" })}
@@ -57,7 +57,7 @@ export function DevPanel() {
         </div>
       ) : (
         <button onClick={() => setOpen(true)} className="grid h-12 w-12 place-items-center rounded-full gradient-primary text-white shadow-button">
-          <Lightning size={20} weight="fill" />
+          <Flash size={20} variant="Bold" />
         </button>
       )}
     </div>

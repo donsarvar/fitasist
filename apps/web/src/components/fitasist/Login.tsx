@@ -8,7 +8,7 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
-import { SignIn, EnvelopeSimple, LockSimple, WarningCircle, GoogleLogo } from "@phosphor-icons/react";
+import { LoginCurve as SignIn, Sms as EnvelopeSimple, Lock as LockSimple, Danger as WarningCircle, Google as GoogleLogo } from "iconsax-react";
 import { Capacitor } from "@capacitor/core";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 
@@ -110,7 +110,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
 
         {error && (
           <div className="mt-6 w-full flex items-center gap-2.5 rounded-2xl bg-destructive/10 border border-destructive/20 p-4 text-xs font-semibold text-destructive animate-fade-in">
-            <WarningCircle size={18} weight="fill" className="shrink-0" />
+            <WarningCircle size={18} variant="Bold" className="shrink-0" />
             <div>{error}</div>
           </div>
         )}
@@ -118,7 +118,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
         {/* Email Form */}
         <form onSubmit={handleEmailAuth} className="mt-6 w-full space-y-3">
           <div className="relative">
-            <EnvelopeSimple size={18} weight="regular" className="absolute left-4 top-3.5 text-text-placeholder" />
+            <EnvelopeSimple size={18} variant="Linear" className="absolute left-4 top-3.5 text-text-placeholder" />
             <input
               type="email"
               placeholder="Email manzilingiz"
@@ -131,7 +131,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
           </div>
 
           <div className="relative">
-            <LockSimple size={18} weight="regular" className="absolute left-4 top-3.5 text-text-placeholder" />
+            <LockSimple size={18} variant="Linear" className="absolute left-4 top-3.5 text-text-placeholder" />
             <input
               type="password"
               placeholder="Parolingiz"
@@ -147,7 +147,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
             disabled={loading}
             className="w-full h-12 rounded-2xl gradient-primary text-white text-sm font-semibold shadow-button flex items-center justify-center gap-2 disabled:opacity-70 active:scale-98 transition-all"
           >
-            <SignIn size={18} weight="bold" />
+            <SignIn size={18} variant="Bold" />
             {loading ? "Yuklanmoqda..." : isRegister ? "Ro'yxatdan o'tish" : "Tizimga kirish"}
           </button>
         </form>
@@ -177,7 +177,7 @@ export function Login({ onAuthSuccess }: { onAuthSuccess: () => void }) {
             disabled={loading}
             className="w-full h-12 rounded-2xl bg-surface border border-border shadow-soft flex items-center justify-center gap-3 text-sm font-semibold text-text-primary hover:bg-secondary-bg active:scale-98 transition-all disabled:opacity-75"
           >
-            <GoogleLogo size={18} weight="bold" className="text-brand" />
+            <GoogleLogo size={18} variant="Bold" className="text-brand" />
             Google akkaunt orqali kirish
           </button>
         </div>

@@ -108,7 +108,7 @@ export function AdminDashboard({ onClose }: { onClose: () => void }) {
       <header className="px-6 pt-[calc(16px+env(safe-area-inset-top))] pb-5 border-b border-border flex items-center justify-between bg-surface shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand">
-            <Trophy className="h-5 w-5" />
+            <Trophy size={20} />
           </div>
           <div>
             <h2 className="text-base font-bold text-text-primary">Admin monitoring paneli</h2>
@@ -116,7 +116,7 @@ export function AdminDashboard({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full bg-secondary-bg text-text-secondary border border-border">
-          <X className="h-4 w-4" />
+          <X size={16} />
         </button>
       </header>
 
@@ -176,7 +176,7 @@ export function AdminDashboard({ onClose }: { onClose: () => void }) {
                 </div>
               </div>
               <button onClick={() => setSelectedUser(null)} className="grid h-9 w-9 place-items-center rounded-full bg-secondary-bg text-text-secondary border border-border">
-                <X className="h-4 w-4" />
+                <X size={16} />
               </button>
             </header>
 
@@ -300,7 +300,7 @@ export function AdminDashboard({ onClose }: { onClose: () => void }) {
                     <p className="text-[10px] text-text-muted">Suhbat tarixi ({selectedChatSession.messages?.length || 0} ta xabar)</p>
                   </div>
                   <button onClick={() => setSelectedChatSession(null)} className="grid h-9 w-9 place-items-center rounded-full bg-secondary-bg text-text-secondary border border-border shrink-0">
-                    <X className="h-4 w-4" />
+                    <X size={16} />
                   </button>
                 </header>
 

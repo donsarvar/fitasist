@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "@/lib/fitasist/config";
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Ruler, Scales as WeightIcon, User as User2, Heartbeat as Activity, Barbell as Dumbbell, Armchair as Sofa, Trophy } from "@phosphor-icons/react";
+import { ArrowLeft2 as ArrowLeft, ArrowRight2 as ArrowRight, TickSquare as Check, Ruler, Weight as WeightIcon, Profile as User2, Activity, Flash as Dumbbell, UserTag as Sofa, Cup as Trophy } from "iconsax-react";
 import { useFit } from "@/lib/fitasist/store";
 import type { ActivityLevel, BodyType, Gender, Language } from "@/lib/fitasist/types";
 
@@ -185,7 +185,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
         <header className="flex items-center justify-between">
           {step > 1 ? (
             <button onClick={back} className="grid h-10 w-10 place-items-center rounded-full bg-surface shadow-soft text-text-secondary">
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft size={20} />
             </button>
           ) : (
             <div className="h-10 w-10" />
@@ -279,7 +279,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                   </div>
                   {gender === "male" && (
                     <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full gradient-primary text-white shadow-xs z-20">
-                      <Check className="h-3.5 w-3.5" weight="bold" />
+                      <Check className="h-3.5 w-3.5" variant="Bold" />
                     </div>
                   )}
                 </button>
@@ -310,7 +310,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                   </div>
                   {gender === "female" && (
                     <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full bg-pink-500 text-white shadow-xs z-20">
-                      <Check className="h-3.5 w-3.5" weight="bold" />
+                      <Check className="h-3.5 w-3.5" variant="Bold" />
                     </div>
                   )}
                 </button>
@@ -323,7 +323,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               <div className="rounded-3xl bg-surface p-6 shadow-card">
                 <div className="flex items-center gap-4">
                   <div className="grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-button">
-                    <Ruler className="h-6 w-6" />
+                    <Ruler size={24} />
                   </div>
                   <div className="flex-1 flex items-baseline gap-2">
                     <input
@@ -345,7 +345,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               <div className="rounded-3xl bg-surface p-6 shadow-card">
                 <div className="flex items-center gap-4">
                   <div className="grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-button">
-                    <WeightIcon className="h-6 w-6" />
+                    <WeightIcon size={24} />
                   </div>
                   <div className="flex-1 flex items-baseline gap-2">
                     <input
@@ -401,9 +401,9 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               <div className="space-y-3">
                 {(
                   [
-                    { k: "athlete", label: t("actAthlete"), sub: t("actAthleteSub"), icon: <Trophy className="h-5 w-5" /> },
-                    { k: "active", label: t("actActive"), sub: t("actActiveSub"), icon: <Dumbbell className="h-5 w-5" /> },
-                    { k: "sedentary", label: t("actSedentary"), sub: t("actSedentarySub"), icon: <Sofa className="h-5 w-5" /> },
+                    { k: "athlete", label: t("actAthlete"), sub: t("actAthleteSub"), icon: <Trophy size={20} /> },
+                    { k: "active", label: t("actActive"), sub: t("actActiveSub"), icon: <Dumbbell size={20} /> },
+                    { k: "sedentary", label: t("actSedentary"), sub: t("actSedentarySub"), icon: <Sofa size={20} /> },
                   ] as const
                 ).map((a) => (
                   <button
@@ -422,7 +422,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                     </div>
                     {activity === a.k && (
                       <div className="grid h-6 w-6 place-items-center rounded-full gradient-primary text-white">
-                        <Check className="h-4 w-4" />
+                        <Check size={16} />
                       </div>
                     )}
                   </button>
@@ -444,7 +444,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
             className="flex-1 h-14 rounded-2xl gradient-primary text-white text-sm font-semibold shadow-button disabled:opacity-40 disabled:shadow-none flex items-center justify-center gap-2"
           >
             {step === TOTAL ? t("finish") : t("next")}
-            {step !== TOTAL && <ArrowRight className="h-4 w-4" />}
+            {step !== TOTAL && <ArrowRight size={16} />}
           </button>
         </div>
       </div>
@@ -510,7 +510,7 @@ function ChoiceCard({ active, onClick, icon, label, tint }: { active: boolean; o
       <div className="text-sm font-semibold text-text-primary">{label}</div>
       {active && (
         <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full gradient-primary text-white">
-          <Check className="h-4 w-4" />
+          <Check size={16} />
         </div>
       )}
     </button>

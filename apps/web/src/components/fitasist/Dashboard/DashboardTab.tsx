@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PencilSimple } from "@phosphor-icons/react";
+import { Edit2 } from "iconsax-react";
 import { useFit } from "@/lib/fitasist/store";
 import { useCalories } from "@/hooks/useCalories";
 import { useHydration } from "@/hooks/useHydration";
@@ -61,11 +61,11 @@ export function DashboardTab({ onOpenChat, onOpenCalorie, onOpenSettings, onOpen
   return (
     <div>
       <div className="pt-2">
-        <div className="text-xs font-medium text-text-muted">{t("goodMorning", p?.language)}</div>
-        <h1 className="text-[26px] font-bold text-text-primary leading-tight">
+        <div className="text-xs font-semibold uppercase tracking-wider text-text-muted">{t("goodMorning", p?.language)}</div>
+        <h1 className="text-[28px] font-extrabold tracking-tight text-text-primary leading-tight mt-0.5">
           {t("hello", p?.language)} {p?.fio?.split(" ")[0] ?? t("friend", p?.language)}! <span className="animate-floaty inline-block">👋</span>
         </h1>
-        <p className="mt-1 text-sm text-text-muted">{t("awesomeDay", p?.language)}</p>
+        <p className="mt-1 text-sm font-medium text-text-muted">{t("awesomeDay", p?.language)}</p>
       </div>
 
       <AIHeroCard onOpenChat={onOpenChat} />
@@ -74,34 +74,34 @@ export function DashboardTab({ onOpenChat, onOpenCalorie, onOpenSettings, onOpen
 
       {/* Personal Motivational Goal Banner */}
       {p?.goal ? (
-        <div className="mt-4 p-4 rounded-3xl bg-surface border border-border dark:border-border/10 shadow-soft flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand/10 text-brand font-bold text-base shrink-0">🎯</div>
-            <div>
+        <div className="mt-4 p-4 rounded-3xl bg-surface/90 backdrop-blur-md shadow-ring border border-white/80 dark:border-white/[0.08] flex items-center justify-between gap-3 group">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand/10 text-brand font-bold text-base shrink-0 shadow-soft">🎯</div>
+            <div className="min-w-0">
               <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Shaxsiy Maqsadingiz</span>
-              <p className="text-xs font-bold text-text-primary mt-0.5 leading-snug">{p.goal}</p>
+              <p className="text-xs font-bold text-text-primary mt-0.5 leading-snug truncate">{p.goal}</p>
             </div>
           </div>
           <button
             onClick={onOpenSettings}
-            className="p-2 rounded-xl bg-secondary-bg text-text-muted hover:text-brand transition-colors shrink-0"
+            className="p-2 rounded-xl bg-secondary-bg text-text-muted hover:text-brand active-press transition-colors shrink-0"
             title="Maqsadni tahrirlash"
           >
-            <PencilSimple size={16} weight="bold" />
+            <Edit2 size={16} variant="Bold" />
           </button>
         </div>
       ) : (
-        <div className="mt-4 p-4 rounded-3xl bg-surface border border-dashed border-border dark:border-border/20 shadow-soft flex items-center justify-between gap-3">
+        <div className="mt-4 p-4 rounded-3xl bg-surface/80 backdrop-blur-md border border-dashed border-border dark:border-white/10 shadow-ring flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="grid h-9 w-9 place-items-center rounded-2xl bg-brand/10 text-brand font-bold text-sm shrink-0">🎯</div>
             <div>
               <p className="text-xs font-bold text-text-primary">Shaxsiy maqsadingizni belgilang</p>
-              <p className="text-[10px] text-text-muted">Masalan: &quot;3 oyda 5 kg ozish!&quot;</p>
+              <p className="text-[10px] font-medium text-text-muted">Masalan: &quot;3 oyda 5 kg ozish!&quot;</p>
             </div>
           </div>
           <button
             onClick={onOpenSettings}
-            className="px-3.5 py-2 rounded-xl bg-brand text-white text-xs font-bold shadow-button hover:opacity-90 active:scale-95 transition-all shrink-0"
+            className="px-3.5 py-2 rounded-xl gradient-primary text-white text-xs font-bold shadow-button hover:opacity-95 active-press transition-all shrink-0"
           >
             Maqsad qo'yish
           </button>

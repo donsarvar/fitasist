@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowUp } from "@phosphor-icons/react";
+import { ArrowUp2 } from "iconsax-react";
 import type { Language } from "@/lib/fitasist/types";
 import { t } from "@/lib/fitasist/translations";
 import { Card } from "../common/ui";
@@ -13,31 +13,66 @@ interface ScoreCardProps {
   lang?: Language;
 }
 
-export const ScoreCard = memo(function ScoreCard({ label, value, sub, color, ring, lang }: ScoreCardProps) {
-  const r = 26;
+export const ScoreCard = memo(function ScoreCard({
+  label,
+  value,
+  sub,
+  color,
+  ring,
+  lang,
+}: ScoreCardProps) {
+  const r = 27;
   const c = 2 * Math.PI * r;
+  const clampedRing = Math.max(0, Math.min(100, ring));
+  const strokeOffset = c - (c * clampedRing) / 100;
+
   return (
-    <Card className="p-4 flex flex-col items-center h-full justify-between">
-      <div className="text-[10px] font-semibold text-text-muted uppercase tracking-wide">{label}</div>
-      <div className="relative mt-2 h-16 w-16">
-        <svg viewBox="0 0 64 64" className="h-full w-full -rotate-90">
-          <circle cx="32" cy="32" r={r} fill="none" stroke="#EEF2F8" strokeWidth="5" />
+    <Card className="p-4 flex flex-col items-center h-full justify-between relative overflow-hidden group">
+      <div className="w-full text-left">
+        <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{label}</span>
+      </div>
+
+      <div className="relative my-2.5 h-[72px] w-[72px]">
+        <svg viewBox="0 0 72 72" className="h-full w-full -rotate-90">
           <circle
-            cx="32"
-            cy="32"
+            cx="36"
+            cy="36"
+            r={r}
+            fill="none"
+            stroke="currentColor"
+            className="text-border dark:text-white/10"
+            strokeWidth="5.5"
+          />
+          <circle
+            cx="36"
+            cy="36"
             r={r}
             fill="none"
             stroke={color}
-            strokeWidth="5"
+            strokeWidth="5.5"
             strokeLinecap="round"
             strokeDasharray={c}
-            strokeDashoffset={c - (c * ring) / 100}
+            strokeDashoffset={strokeOffset}
+            style={{
+              transition: "stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
           />
         </svg>
-        <div className="absolute inset-0 grid place-items-center text-[15px] font-bold text-text-primary">{value}</div>
+        <div className="absolute inset-0 grid place-items-center text-[15px] font-black text-text-primary tabular-nums tracking-tight">
+          {value}
+        </div>
       </div>
-      <div className="mt-2 text-[11px] font-medium" style={{ color }}>{sub}</div>
-      <div className="mt-1 text-[10px] text-text-muted flex items-center gap-0.5"><ArrowUp size={10} weight="bold" className="text-success" />{t("pointsPlus", lang)}</div>
+
+      <div className="text-center w-full">
+        <div className="text-[12px] font-bold tabular-nums tracking-tight" style={{ color }}>
+          {sub}
+        </div>
+        <div className="mt-1 text-[10px] font-semibold text-text-muted flex items-center justify-center gap-0.5">
+          <ArrowUp2 size={11} variant="Bold" className="text-success" />
+          <span>{t("pointsPlus", lang)}</span>
+        </div>
+      </div>
     </Card>
   );
 });
+

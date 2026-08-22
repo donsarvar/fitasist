@@ -49,7 +49,7 @@ export function HeaderNav({ onOpenSettings, onOpenNotifications }: HeaderNavProp
               aria-label="Notifications"
               className="h-10 w-10 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all active:scale-95 relative"
             >
-              <Bell className="h-5 w-5" />
+              <Bell size={20} />
             </button>
           )}
 
@@ -58,7 +58,7 @@ export function HeaderNav({ onOpenSettings, onOpenNotifications }: HeaderNavProp
             aria-label="Open Settings"
             className="h-10 w-10 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all active:scale-95"
           >
-            <Settings className="h-5 w-5" />
+            <Settings size={20} />
           </button>
         </div>
       </div>

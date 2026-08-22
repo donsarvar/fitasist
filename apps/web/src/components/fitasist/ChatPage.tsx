@@ -300,7 +300,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
       <div className="px-4 pt-[calc(12px+env(safe-area-inset-top))] pb-3 border-b border-border flex items-center justify-between bg-surface shrink-0 z-20">
         <div className="flex items-center gap-3">
           <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 text-text-secondary hover:bg-secondary-bg rounded-full transition-colors">
-            <Menu className="h-5 w-5" />
+            <Menu size={20} />
           </button>
           <div>
             <h2 className="text-base font-bold text-text-primary">{t("aiCoach", lang)}</h2>
@@ -311,10 +311,10 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
         </div>
         <div className="flex items-center gap-2">
           <button onClick={createNewSession} className="p-2 text-brand hover:bg-brand/10 rounded-full transition-colors" title={t("newChat", lang)}>
-            <Plus className="h-5 w-5" />
+            <Plus size={20} />
           </button>
           <button onClick={onClose} className="p-2 text-text-secondary hover:bg-secondary-bg rounded-full transition-colors">
-            <X className="h-5 w-5" />
+            <X size={20} />
           </button>
         </div>
       </div>
@@ -334,7 +334,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
                 onClick={() => setSidebarOpen(false)} 
                 className="p-1.5 rounded-lg bg-secondary-bg hover:bg-border text-text-secondary hover:text-text-primary transition-colors"
               >
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft size={16} />
               </button>
             </div>
 
@@ -514,7 +514,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
             className="p-2 text-text-muted hover:text-brand rounded-xl hover:bg-white dark:hover:bg-zinc-800 transition-colors shrink-0"
             title={lang === "ru" ? "Загрузить фото" : lang === "en" ? "Upload image" : "Rasm yuklash"}
           >
-            <ImageIcon className="h-5 w-5" />
+            <ImageIcon size={20} />
           </button>
           
           <textarea
@@ -558,7 +558,7 @@ async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise
           
           <div className="relative w-full max-w-[320px] bg-surface border border-border rounded-2xl p-5 shadow-2xl animate-scale-in text-center z-10">
             <div className="h-12 w-12 rounded-full bg-destructive/15 border border-destructive/30 text-destructive grid place-items-center mx-auto mb-3">
-              <AlertTriangle className="h-6 w-6" />
+              <AlertTriangle size={24} />
             </div>
 
             <h3 className="text-base font-bold text-text-primary mb-1">

@@ -28,8 +28,8 @@ Kod hech qachon tasodifiy joyga yozilmaydi. Har bir o'zgarish o'zining qat'iy ma
 
 ## 3. 🎨 Dizayn va Ikonlar Standarti (Design Consistency)
 
-* **Yagona Ikon Kutubxonasi:** Loyihada faqat va faqat **`@phosphor-icons/react`** ishlatiladi. `lucide-react`, `react-icons` yoki boshqa kutubxonalarni import qilish **qat'iyan man etiladi**.
-* **Apple SF Style:** Ikonlar vaznida `weight="fill"` (faol holat uchun) va `weight="regular"` yoki `weight="bold"` (no-faol holat uchun) ishlatiladi.
+* **Yagona Ikon Kutubxonasi:** Loyihada faqat va faqat **`iconsax-react`** ishlatiladi. Boshqa kutubxonalarni import qilish **qat'iyan man etiladi**.
+* **Apple & Modern Glass Style:** Ikonlar variantida `variant="Bold"` yoki `variant="Bulk"` (faol holat uchun) va `variant="Linear"` (no-faol holat uchun) ishlatiladi.
 * **Tailwind & Design Tokens:** Ranglar `styles.css` dagi CSS o'zgaruvchilar orqali olinadi (`brand`, `surface`, `secondary-bg`, `text-primary`, `text-muted`).
 
 ---

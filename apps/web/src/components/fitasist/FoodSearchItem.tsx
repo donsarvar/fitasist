@@ -44,7 +44,7 @@ export function FoodSearchItem({ item, lang, onSelect }: FoodSearchItemProps) {
       </div>
 
       <button className="h-8 w-8 rounded-xl bg-[#4F6BFF]/10 text-[#4F6BFF] group-hover:bg-[#4F6BFF] group-hover:text-white flex items-center justify-center transition-colors shrink-0">
-        <Plus className="h-4 w-4" />
+        <Plus size={16} />
       </button>
     </div>
   );

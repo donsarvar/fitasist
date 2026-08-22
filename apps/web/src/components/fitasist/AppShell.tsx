@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  House, ChartBar, Trophy, Bell, Moon, Sun,
-  ChatCircleText, Medal, User, GearSix,
-} from "@phosphor-icons/react";
+  Home2 as House,
+  Chart2 as ChartBar,
+  Cup as Trophy,
+  Notification as Bell,
+  Moon,
+  Sun1 as Sun,
+  MessageText as ChatCircleText,
+  MedalStar as Medal,
+  Profile as User,
+  Setting2 as GearSix,
+} from "iconsax-react";
 import { useFit } from "@/lib/fitasist/store";
 import type { AppNotification } from "@/lib/fitasist/types";
 import { t } from "@/lib/fitasist/translations";
@@ -107,37 +115,56 @@ export function AppShell() {
       <div className="mx-auto w-full max-w-[480px] relative min-h-dvh pb-[calc(120px+env(safe-area-inset-bottom))]">
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="sticky top-0 z-40 glass-header px-6 pt-[calc(12px+env(safe-area-inset-top))] pb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="grid h-8 w-8 place-items-center rounded-full gradient-primary text-white text-[13px] font-black shadow-button select-none">F</div>
-            <span className="text-lg font-bold tracking-tight text-gradient-primary">FitAsist</span>
+        <header className="sticky top-0 z-40 glass-header px-6 pt-[calc(12px+env(safe-area-inset-top))] pb-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="grid h-8 w-8 place-items-center rounded-xl gradient-primary text-white text-[13px] font-black shadow-button select-none">
+              F
+            </div>
+            <span className="text-lg font-black tracking-tight text-gradient-primary">FitAsist</span>
           </div>
           <div className="flex items-center gap-2">
             <IconBtn onClick={() => update({ theme: state.theme === "dark" ? "light" : "dark" })}>
-              {state.theme === "dark" ? <Sun size={18} weight="fill" /> : <Moon size={18} weight="fill" />}
+              {state.theme === "dark" ? <Sun size={17} variant="Bold" /> : <Moon size={17} variant="Bold" />}
             </IconBtn>
-            <button onClick={() => setNotifOpen(true)} className="relative grid h-9 w-9 place-items-center rounded-full bg-white dark:bg-[#12131a] shadow-soft border border-border dark:border-border/10 text-text-secondary dark:text-text-primary">
-              <Bell size={16} weight="fill" />
+            <button
+              onClick={() => setNotifOpen(true)}
+              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/90 dark:bg-surface-elevated/90 backdrop-blur-md shadow-ring border border-white/60 dark:border-white/10 text-text-secondary dark:text-text-primary active-press transition-all"
+            >
+              <Bell size={16} variant="Bold" />
               {unread > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-destructive text-[10px] font-bold text-white grid place-items-center animate-pulse">{unread}</span>
+                <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-destructive text-[9px] font-black text-white grid place-items-center animate-pulse tabular-nums">
+                  {unread}
+                </span>
               )}
             </button>
-            <button onClick={() => setSettingsOpen(true)} className="relative h-9 w-9 rounded-full shadow-button border-2 border-brand overflow-hidden group shrink-0 active:scale-95 transition-all" title="Profil va Sozlamalar">
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className="relative h-9 w-9 rounded-full shadow-ring border-2 border-brand/60 overflow-hidden shrink-0 active-press transition-all"
+              title="Profil va Sozlamalar"
+            >
               {state.profile?.photoUrl || user?.photoURL ? (
-                <img src={state.profile?.photoUrl || user?.photoURL || ""} alt="Avatar" className="h-full w-full object-cover" />
+                <img
+                  src={state.profile?.photoUrl || user?.photoURL || ""}
+                  alt="Avatar"
+                  className="h-full w-full object-cover"
+                />
               ) : (
-                <div className="h-full w-full gradient-primary text-white flex items-center justify-center font-bold text-xs">{state.profile?.fio?.charAt(0) || "P"}</div>
+                <div className="h-full w-full gradient-primary text-white flex items-center justify-center font-black text-xs">
+                  {state.profile?.fio?.charAt(0) || "P"}
+                </div>
               )}
             </button>
           </div>
         </header>
 
         {/* ── Main content ───────────────────────────────────────────────── */}
-        <main className="px-6 pt-4 animate-fade-in" key={tab}>{screen}</main>
+        <main className="px-6 pt-4 animate-fade-in" key={tab}>
+          {screen}
+        </main>
 
         {/* ── Bottom Navigation ──────────────────────────────────────────── */}
         <nav className="fixed bottom-[calc(16px+env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2 w-[calc(100%-32px)] max-w-[448px]">
-          <div className="relative glass-nav rounded-[30px] shadow-card px-2 py-2 flex items-center justify-between border border-white/60">
+          <div className="relative glass-nav rounded-[32px] shadow-glass px-2.5 py-2 flex items-center justify-between border border-white/70 dark:border-white/10">
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = tab === item.k;
@@ -145,11 +172,16 @@ export function AppShell() {
                 <button
                   key={item.k}
                   onClick={() => setTab(item.k)}
-                  className={"relative flex flex-col items-center gap-0.5 rounded-full py-2 px-2.5 transition-all " + (active ? "text-white" : "text-[#6B7280] dark:text-text-muted")}
+                  className={
+                    "relative flex flex-col items-center gap-0.5 rounded-2xl py-2 px-3 transition-all select-none active-press " +
+                    (active ? "text-white" : "text-text-muted hover:text-text-primary")
+                  }
                 >
-                  {active && <span className="absolute inset-0 rounded-full gradient-primary shadow-button -z-0" />}
-                  <Icon size={16} weight={active ? "fill" : "regular"} className="relative z-10" />
-                  <span className="text-[9px] font-semibold relative z-10">{item.label}</span>
+                  {active && (
+                    <span className="absolute inset-0 rounded-2xl gradient-primary shadow-button -z-0" />
+                  )}
+                  <Icon size={17} variant={active ? "Bold" : "Linear"} className="relative z-10" />
+                  <span className="text-[9px] font-bold tracking-tight relative z-10">{item.label}</span>
                 </button>
               );
             })}
@@ -168,14 +200,23 @@ export function AppShell() {
 
         {/* ── Floating AI Chat Button ────────────────────────────────────── */}
         {!coachOpen && (
-          <button onClick={() => setCoachOpen(true)} className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-4 z-40 grid h-14 w-14 place-items-center rounded-full gradient-primary text-white shadow-hero hover:scale-105 active:scale-95 transition-transform">
-            <ChatCircleText size={24} weight="fill" />
+          <button
+            onClick={() => setCoachOpen(true)}
+            className="fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-4 z-40 grid h-13 w-13 place-items-center rounded-full gradient-primary text-white shadow-hero active-press hover:scale-105 transition-all border border-white/30"
+          >
+            <ChatCircleText size={22} variant="Bold" />
           </button>
         )}
 
         {/* ── Overlays / Modals ─────────────────────────────────────────── */}
         {settingsOpen && (
-          <SettingsSheet onClose={() => setSettingsOpen(false)} onAdminClick={() => { setSettingsOpen(false); setAdminOpen(true); }} />
+          <SettingsSheet
+            onClose={() => setSettingsOpen(false)}
+            onAdminClick={() => {
+              setSettingsOpen(false);
+              setAdminOpen(true);
+            }}
+          />
         )}
         {notifOpen && <NotifSheet onClose={() => setNotifOpen(false)} />}
         {coachOpen && <ChatPage onClose={() => setCoachOpen(false)} />}
