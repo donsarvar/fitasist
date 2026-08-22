@@ -59,30 +59,23 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           {name}
         </h3>
 
-        {/* Distance Pills with Mountain Icons */}
+        {/* Distance Pills: All unified, same elegant frosted glass style */}
         <div className="mt-3.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          {next.distances.map((d, idx) => {
-            const isPrimary = idx === 0 || next.distances.length === 1;
-            return (
-              <div
-                key={d}
-                className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shrink-0 ${
-                  isPrimary
-                    ? "bg-gradient-to-r from-[#5850EC] to-[#7B5CFF] text-white shadow-button"
-                    : "bg-white/90 dark:bg-white/10 backdrop-blur-md text-slate-800 dark:text-white/90 border border-white/80 dark:border-white/10 shadow-2xs"
-                }`}
-              >
-                <Mountains
-                  size={13}
-                  weight={isPrimary ? "fill" : "bold"}
-                  className={isPrimary ? "text-white" : "text-slate-500 dark:text-slate-400"}
-                />
-                <span className="text-[10.5px] font-extrabold tracking-tight whitespace-nowrap">
-                  {d}
-                </span>
-              </div>
-            );
-          })}
+          {next.distances.map((d) => (
+            <div
+              key={d}
+              className="px-3 py-1.5 rounded-xl flex items-center gap-1.5 bg-white/90 dark:bg-white/15 backdrop-blur-md text-slate-800 dark:text-white/90 border border-white/80 dark:border-white/15 shadow-2xs transition-all shrink-0"
+            >
+              <Mountains
+                size={13}
+                weight="bold"
+                className="text-slate-500 dark:text-slate-300"
+              />
+              <span className="text-[10.5px] font-extrabold tracking-tight whitespace-nowrap">
+                {d}
+              </span>
+            </div>
+          ))}
         </div>
 
         {/* Bottom Section: Clean Capsule with Number + KUN QOLDI underneath (Left) + Gradient CTA (Right) */}
