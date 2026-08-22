@@ -16,11 +16,6 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
 
   const daysLeft = getDaysLeft(next.date);
 
-  const badgeText =
-    lang === "ru" ? "СЛЕДУЮЩИЙ ВЫЗОВ" :
-    lang === "en" ? "NEXT CHALLENGE" :
-    "KEYINGI CHAQIRUV";
-
   const daysUnit =
     lang === "ru" ? "ДНЕЙ ДО СТАРТА" :
     lang === "en" ? "DAYS TO GO" :
@@ -64,15 +59,17 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
 
       {/* Main Content Layout */}
       <div className="relative z-10">
-        {/* Top Tag Badge */}
-        <div className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-[#5850EC] text-[10px] font-black tracking-wider uppercase text-white shadow-xs">
-          <span>{badgeText}</span>
-        </div>
+        {/* Top Header Row: Title on Left, Batafsil Pill on Top Right Corner */}
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-[21px] font-black text-slate-900 dark:text-white leading-tight tracking-tight max-w-[72%] drop-shadow-xs">
+            {name}
+          </h3>
 
-        {/* Marathon Title */}
-        <h3 className="mt-2.5 text-[21px] font-black text-slate-900 dark:text-white leading-tight tracking-tight max-w-[80%]">
-          {name}
-        </h3>
+          <div className="px-3.5 py-1.5 rounded-2xl bg-white/90 dark:bg-white/15 backdrop-blur-md border border-slate-200/80 dark:border-white/20 shadow-xs flex items-center gap-1.5 text-[11px] font-extrabold text-[#4F46E5] dark:text-white group-hover:bg-[#5850EC] group-hover:text-white transition-all shrink-0">
+            <span>{detailsLabel}</span>
+            <ArrowRight size={12} weight="bold" />
+          </div>
+        </div>
 
         {/* Distance Pills */}
         <div className="mt-3 flex items-center gap-2 flex-wrap">
@@ -93,35 +90,28 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           })}
         </div>
 
-        {/* Middle Row: Big Countdown on Left, Action Pill on Right */}
-        <div className="mt-4 flex items-end justify-between gap-3">
+        {/* Bottom Section: Big Countdown on Left, Crisp Localized Location & Date on Right */}
+        <div className="mt-5 flex items-end justify-between gap-2">
           <div className="flex items-baseline gap-2">
             <span className="text-[38px] font-black leading-none text-[#4F46E5] dark:text-[#818CF8] tracking-tight">
               {daysLeft}
             </span>
-            <span className="text-[11px] font-black tracking-wider text-slate-500 dark:text-slate-400 uppercase leading-none">
+            <span className="text-[11px] font-black tracking-wider text-slate-600 dark:text-slate-400 uppercase leading-none">
               {daysUnit}
             </span>
           </div>
 
-          {/* Right Action Button Pill */}
-          <div className="px-4 py-2 rounded-2xl bg-white/90 dark:bg-white/15 backdrop-blur-md border border-slate-200/80 dark:border-white/20 shadow-xs flex items-center gap-1.5 text-[11px] font-extrabold text-[#4F46E5] dark:text-white group-hover:bg-[#5850EC] group-hover:text-white transition-all shrink-0">
-            <span>{detailsLabel}</span>
-            <ArrowRight size={13} weight="bold" />
+          <div className="flex items-center gap-2 text-[11px] font-bold text-slate-800 dark:text-slate-100 bg-white/70 dark:bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/60 dark:border-white/10 shadow-2xs whitespace-nowrap">
+            <span className="flex items-center gap-1">
+              <MapPin size={13} weight="fill" className="text-[#5850EC] shrink-0" />
+              <span>{next.city}</span>
+            </span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="flex items-center gap-1">
+              <CalendarBlank size={13} weight="bold" className="shrink-0" />
+              <span>{formattedDate}</span>
+            </span>
           </div>
-        </div>
-
-        {/* Bottom Row: Full-width Location & Date in ONE single clean line */}
-        <div className="mt-2.5 flex items-center gap-2 text-[11px] font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
-          <span className="flex items-center gap-1">
-            <MapPin size={13} weight="fill" className="text-[#5850EC] shrink-0" />
-            <span>{next.city}</span>
-          </span>
-          <span className="text-slate-300 dark:text-slate-600">•</span>
-          <span className="flex items-center gap-1">
-            <CalendarBlank size={13} weight="bold" className="shrink-0" />
-            <span>{formattedDate}</span>
-          </span>
         </div>
       </div>
     </button>
