@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings01Icon, Logout01Icon, Delete02Icon, Shield01Icon, PencilEdit02Icon, Camera01Icon, User02Icon } from "hugeicons-react";
+import { Settings01Icon, Logout01Icon, Delete02Icon, Shield01Icon, PencilEdit02Icon, Camera01Icon, User02Icon, FlashIcon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { t } from "@/lib/fitasist/translations";
 import { Sheet } from "./common/ui";
@@ -7,9 +7,10 @@ import { Sheet } from "./common/ui";
 interface SettingsSheetProps {
   onClose: () => void;
   onAdminClick: () => void;
+  onDevClick?: () => void;
 }
 
-export function SettingsSheet({ onClose, onAdminClick }: SettingsSheetProps) {
+export function SettingsSheet({ onClose, onAdminClick, onDevClick }: SettingsSheetProps) {
   const { state, update, reset, logout, user } = useFit();
   const p = state.profile;
   const [form, setForm] = useState(p);
@@ -42,9 +43,24 @@ export function SettingsSheet({ onClose, onAdminClick }: SettingsSheetProps) {
 
         {/* Admin access (admin only) */}
         {user?.email === "salimovsarvar21@gmail.com" && (
-          <button onClick={onAdminClick} className="w-full h-12 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-500 text-xs font-bold flex items-center justify-center gap-2 border border-amber-500/20 transition-all active:scale-95 mb-1">
-            <Shield01Icon size={18} /> FitAssist Admin
-          </button>
+          <div className="grid grid-cols-2 gap-2 mb-1">
+            <button
+              type="button"
+              onClick={onAdminClick}
+              className="h-11 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-500 text-xs font-bold flex items-center justify-center gap-1.5 border border-amber-500/20 transition-all active-press"
+            >
+              <Shield01Icon size={16} /> FitAssist Admin
+            </button>
+            {onDevClick && (
+              <button
+                type="button"
+                onClick={onDevClick}
+                className="h-11 rounded-2xl bg-brand/10 hover:bg-brand/20 text-brand text-xs font-bold flex items-center justify-center gap-1.5 border border-brand/20 transition-all active-press"
+              >
+                <FlashIcon size={16} /> Dev Panel
+              </button>
+            )}
+          </div>
         )}
 
         {/* Profile photo */}

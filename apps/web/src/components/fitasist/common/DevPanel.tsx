@@ -1,23 +1,22 @@
-import { useState } from "react";
-import { Notification01Icon, ArrowDown01Icon, FlashIcon, Forward01Icon, Database01Icon } from "hugeicons-react";
+import { Notification01Icon, Forward01Icon, Database01Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { t } from "@/lib/fitasist/translations";
+import { Sheet } from "./ui";
 
 function DevBtn({ onClick, icon, title, sub }: { onClick: () => void; icon: React.ReactNode; title: string; sub: string }) {
   return (
-    <button onClick={onClick} className="w-full flex items-center gap-3 rounded-xl bg-secondary-bg p-2.5 text-left">
-      <div className="grid h-8 w-8 place-items-center rounded-lg bg-white text-brand shadow-soft">{icon}</div>
+    <button type="button" onClick={onClick} className="w-full flex items-center gap-3 rounded-2xl bg-secondary-bg hover:bg-border/60 p-3 text-left transition-all active-press">
+      <div className="grid h-9 w-9 place-items-center rounded-xl bg-white dark:bg-surface text-brand shadow-soft shrink-0">{icon}</div>
       <div>
-        <div className="text-xs font-semibold text-text-primary">{title}</div>
+        <div className="text-xs font-bold text-text-primary">{title}</div>
         <div className="text-[10px] text-text-muted">{sub}</div>
       </div>
     </button>
   );
 }
 
-export function DevPanel() {
+export function DevPanel({ onClose }: { onClose: () => void }) {
   const { state, update, pushNotification } = useFit();
-  const [open, setOpen] = useState(false);
 
   const fastForward = () => update({ simulatedDayOffset: state.simulatedDayOffset + 1 });
 
@@ -38,28 +37,15 @@ export function DevPanel() {
   currentDate.setDate(currentDate.getDate() + state.simulatedDayOffset);
 
   return (
-    <div className="fixed bottom-24 right-4 z-40 max-w-[260px]">
-      {open ? (
-        <div className="rounded-3xl bg-surface shadow-card border border-border p-4 animate-fade-in">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-bold text-text-primary">Dasturchi sinov paneli</div>
-            <button onClick={() => setOpen(false)} className="text-text-muted"><ArrowDown01Icon size={16} /></button>
-          </div>
-          <div className="mt-3 space-y-2">
-            <DevBtn onClick={fastForward} icon={<Forward01Icon size={16} />} title="1 kun oldinga surish" sub="Keyingi kunni simulyatsiya qilish" />
-            <DevBtn onClick={simulate} icon={<Notification01Icon size={16} />} title="Xabarnomalarni yuborish" sub="Barcha bildirishnomalarni chiqarish" />
-            <DevBtn onClick={fillMock} icon={<Database01Icon size={16} />} title="Test ma'lumotlarini to'ldirish" sub="30 kunlik o'lchov yaratish" />
-          </div>
-          <div className="mt-3 pt-3 border-t border-divider text-[10px] text-text-muted">
-            Simulyatsiya sanasi: {currentDate.toLocaleDateString("uz-UZ", { month: "short", day: "numeric", year: "numeric" })}
-            <br />(Faqat sinov maqsadida)
-          </div>
-        </div>
-      ) : (
-        <button onClick={() => setOpen(true)} className="grid h-12 w-12 place-items-center rounded-full gradient-primary text-white shadow-button">
-          <FlashIcon size={20} />
-        </button>
-      )}
-    </div>
+    <Sheet onClose={onClose} title="Dasturchi sinov paneli" subtitle="Faqat test va sinov maqsadida">
+      <div className="space-y-3">
+        <DevBtn onClick={fastForward} icon={<Forward01Icon size={18} />} title="1 kun oldinga surish" sub="Keyingi kunni simulyatsiya qilish" />
+        <DevBtn onClick={simulate} icon={<Notification01Icon size={18} />} title="Xabarnomalarni yuborish" sub="Barcha bildirishnomalarni chiqarish" />
+        <DevBtn onClick={fillMock} icon={<Database01Icon size={18} />} title="Test ma'lumotlarini to'ldirish" sub="30 kunlik o'lchov yaratish" />
+      </div>
+      <div className="mt-4 pt-3 border-t border-divider text-xs text-text-muted">
+        Simulyatsiya sanasi: <span className="font-bold text-text-primary">{currentDate.toLocaleDateString("uz-UZ", { month: "short", day: "numeric", year: "numeric" })}</span>
+      </div>
+    </Sheet>
   );
 }

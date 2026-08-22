@@ -153,6 +153,7 @@
 @layer base {
   * {
     border-color: var(--color-border);
+    -webkit-tap-highlight-color: transparent;
   }
   html,
   body {
@@ -162,9 +163,29 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.01em;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
   }
   body {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    overscroll-behavior-y: none;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  button svg,
+  button span.pointer-none {
+    pointer-events: none;
   }
   
   /* Auto style inputs/selects for dark mode globally */
@@ -215,9 +236,10 @@
   font-feature-settings: "tnum" 1;
 }
 @utility active-press {
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;
+  transition: transform 0.1s ease, opacity 0.1s ease;
   &:active {
-    transform: scale(0.97);
+    transform: scale(0.98);
+    opacity: 0.8;
   }
 }
 @utility glass-card {

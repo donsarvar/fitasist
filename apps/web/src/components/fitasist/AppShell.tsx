@@ -31,6 +31,7 @@ export function AppShell() {
   const [coachOpen, setCoachOpen] = useState(false);
   const [calorieOpen, setCalorieOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
+  const [devOpen, setDevOpen] = useState(false);
   const [toast, setToast] = useState<AppNotification | null>(null);
   const toastTimer = useRef<number | null>(null);
 
@@ -152,33 +153,31 @@ export function AppShell() {
         </main>
 
         {/* ── Bottom Navigation ──────────────────────────────────────────── */}
-        <nav className="fixed bottom-[calc(16px+env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2 w-[calc(100%-32px)] max-w-[448px]">
-          <div className="relative glass-nav rounded-[32px] shadow-glass px-2.5 py-2 flex items-center justify-between border border-white/70 dark:border-white/10">
+        <nav className="fixed bottom-[calc(16px+env(safe-area-inset-bottom))] left-1/2 z-50 -translate-x-1/2 w-[calc(100%-32px)] max-w-[448px]">
+          <div className="relative glass-nav rounded-[32px] shadow-glass p-1.5 flex items-center justify-between border border-white/70 dark:border-white/10 gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = tab === item.k;
               return (
                 <button
                   key={item.k}
+                  type="button"
                   onClick={() => setTab(item.k)}
                   className={
-                    "relative flex flex-col items-center gap-0.5 rounded-2xl py-2 px-3 transition-all select-none active-press " +
+                    "relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl py-2 px-1 transition-all select-none active-press " +
                     (active ? "text-white" : "text-text-muted hover:text-text-primary")
                   }
                 >
                   {active && (
-                    <span className="absolute inset-0 rounded-2xl gradient-primary shadow-button -z-0" />
+                    <span className="absolute inset-0 rounded-2xl gradient-primary shadow-button -z-0 pointer-none" />
                   )}
-                  <Icon size={18} className="relative z-10" />
-                  <span className="text-[9px] font-bold tracking-tight relative z-10">{item.label}</span>
+                  <Icon size={18} className="relative z-10 pointer-none" />
+                  <span className="text-[9px] font-bold tracking-tight relative z-10 pointer-none truncate max-w-full">{item.label}</span>
                 </button>
               );
             })}
           </div>
         </nav>
-
-        {/* ── Dev Panel ─────────────────────────────────────────────────── */}
-        <DevPanel />
 
         {/* ── Toast ─────────────────────────────────────────────────────── */}
         {toast && (
@@ -190,10 +189,12 @@ export function AppShell() {
         {/* ── Floating AI Chat Button ────────────────────────────────────── */}
         {!coachOpen && (
           <button
+            type="button"
             onClick={() => setCoachOpen(true)}
-            className="fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-4 z-40 grid h-13 w-13 place-items-center rounded-full gradient-primary text-white shadow-hero active-press hover:scale-105 transition-all border border-white/30"
+            aria-label="AI Coach"
+            className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-4 z-40 grid h-13 w-13 place-items-center rounded-full gradient-primary text-white shadow-hero active-press hover:scale-105 transition-all border border-white/30"
           >
-            <Comment01Icon size={22} />
+            <Comment01Icon size={22} className="pointer-none" />
           </button>
         )}
 
@@ -205,8 +206,13 @@ export function AppShell() {
               setSettingsOpen(false);
               setAdminOpen(true);
             }}
+            onDevClick={() => {
+              setSettingsOpen(false);
+              setDevOpen(true);
+            }}
           />
         )}
+        {devOpen && <DevPanel onClose={() => setDevOpen(false)} />}
         {notifOpen && <NotifSheet onClose={() => setNotifOpen(false)} />}
         {coachOpen && <ChatPage onClose={() => setCoachOpen(false)} />}
         {calorieOpen && <CalorieModal onClose={() => setCalorieOpen(false)} />}

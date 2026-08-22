@@ -15,6 +15,7 @@ export function IconBtn({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       title={title}
       className={
