@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash, ArrowDown2 as ArrowDown, ArrowUp2 as ArrowUp } from "iconsax-react";
+import { Delete02Icon, ArrowDown01Icon, ArrowUp01Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { useMeasurements } from "@/hooks/useMeasurements";
 import type { Measurement, Language } from "@/lib/fitasist/types";
@@ -55,7 +55,7 @@ function StatBig({ label, value, diff: d, sub }: { label: string; value: number 
       {sub && <div className="text-[10px] text-text-muted uppercase tracking-wide">{sub}</div>}
       {d !== null && (
         <div className={`mt-1 flex items-center text-[11px] font-medium ${d < 0 ? "text-success" : "text-warning"}`}>
-          {d < 0 ? <ArrowDown size={12} variant="Bold" /> : <ArrowUp size={12} variant="Bold" />}
+          {d < 0 ? <ArrowDown01Icon size={12} /> : <ArrowUp01Icon size={12} />}
           {Math.abs(d)}
         </div>
       )}
@@ -184,7 +184,7 @@ export function MeasurementsTab() {
                 </div>
               </div>
               <button onClick={() => deleteMeasurement(m.id)} className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive">
-                <Trash size={16} variant="Bold" />
+                <Delete02Icon size={16} />
               </button>
             </Card>
           ))}

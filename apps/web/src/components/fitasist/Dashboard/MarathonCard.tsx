@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowRight, Calendar, Award } from "iconsax-react";
+import { Calendar01Icon, ArrowRight01Icon, Medal01Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { getNearestRegionalMarathon, getDaysLeft } from "../MarathonPage";
 
@@ -66,9 +66,8 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
               key={d}
               className="px-2 py-1.5 rounded-xl flex items-center justify-center gap-1 bg-white/90 dark:bg-white/10 backdrop-blur-md text-text-primary border border-white/80 dark:border-white/10 shadow-ring min-w-0"
             >
-              <Award
+              <Medal01Icon
                 size={12}
-                variant="Bold"
                 className="text-text-muted shrink-0"
               />
               <span className="text-[10px] font-extrabold tracking-tight truncate text-center tabular-nums">
@@ -83,7 +82,7 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           {/* Left Glass Capsule (No date, KUN QOLDI directly under number) */}
           <div className="bg-white/85 dark:bg-surface-elevated/90 backdrop-blur-xl border border-white/90 dark:border-white/10 rounded-2xl py-2 px-3.5 shadow-glass flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl gradient-primary text-white flex items-center justify-center shadow-button shrink-0">
-              <Calendar size={16} variant="Bold" />
+              <Calendar01Icon size={16} />
             </div>
             <div className="flex flex-col items-start leading-none">
               <span className="text-[24px] font-black text-brand tracking-tight leading-none tabular-nums">
@@ -98,7 +97,7 @@ export const MarathonCard = memo(function MarathonCard({ onOpenMarathons }: Prop
           {/* Right Purple Gradient CTA Button */}
           <div className="px-5 py-3 rounded-2xl gradient-primary text-white text-xs font-black shadow-button flex items-center gap-2 group-hover:opacity-95 transition-all shrink-0 select-none">
             <span>{detailsLabel}</span>
-            <ArrowRight size={13} variant="Bold" />
+            <ArrowRight01Icon size={13} />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "@/lib/fitasist/config";
 import { useState } from "react";
-import { ArrowLeft2 as ArrowLeft, ArrowRight2 as ArrowRight, TickSquare as Check, Ruler, Weight as WeightIcon, Profile as User2, Activity, Flash as Dumbbell, UserTag as Sofa, Cup as Trophy } from "iconsax-react";
+import { Dumbbell01Icon, ArrowLeft01Icon, ArrowRight01Icon, CheckmarkSquare01Icon, RulerIcon, WeightScale01Icon, User02Icon, Activity01Icon, FlashIcon, Target02Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import type { ActivityLevel, BodyType, Gender, Language } from "@/lib/fitasist/types";
 
@@ -185,7 +185,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
         <header className="flex items-center justify-between">
           {step > 1 ? (
             <button onClick={back} className="grid h-10 w-10 place-items-center rounded-full bg-surface shadow-soft text-text-secondary">
-              <ArrowLeft size={20} />
+              <ArrowLeft01Icon size={20} />
             </button>
           ) : (
             <div className="h-10 w-10" />
@@ -279,7 +279,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                   </div>
                   {gender === "male" && (
                     <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full gradient-primary text-white shadow-xs z-20">
-                      <Check className="h-3.5 w-3.5" variant="Bold" />
+                      <CheckmarkSquare01Icon className="h-3.5 w-3.5" />
                     </div>
                   )}
                 </button>
@@ -310,7 +310,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                   </div>
                   {gender === "female" && (
                     <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full bg-pink-500 text-white shadow-xs z-20">
-                      <Check className="h-3.5 w-3.5" variant="Bold" />
+                      <CheckmarkSquare01Icon className="h-3.5 w-3.5" />
                     </div>
                   )}
                 </button>
@@ -323,7 +323,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               <div className="rounded-3xl bg-surface p-6 shadow-card">
                 <div className="flex items-center gap-4">
                   <div className="grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-button">
-                    <Ruler size={24} />
+                    <RulerIcon size={24} />
                   </div>
                   <div className="flex-1 flex items-baseline gap-2">
                     <input
@@ -345,7 +345,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               <div className="rounded-3xl bg-surface p-6 shadow-card">
                 <div className="flex items-center gap-4">
                   <div className="grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-button">
-                    <WeightIcon size={24} />
+                    <WeightScale01Icon size={24} />
                   </div>
                   <div className="flex-1 flex items-baseline gap-2">
                     <input
@@ -401,9 +401,9 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               <div className="space-y-3">
                 {(
                   [
-                    { k: "athlete", label: t("actAthlete"), sub: t("actAthleteSub"), icon: <Trophy size={20} /> },
-                    { k: "active", label: t("actActive"), sub: t("actActiveSub"), icon: <Dumbbell size={20} /> },
-                    { k: "sedentary", label: t("actSedentary"), sub: t("actSedentarySub"), icon: <Sofa size={20} /> },
+                    { k: "athlete", label: t("actAthlete"), sub: t("actAthleteSub"), icon: <Target02Icon size={20} /> },
+                    { k: "active", label: t("actActive"), sub: t("actActiveSub"), icon: <Dumbbell01Icon size={20} /> },
+                    { k: "sedentary", label: t("actSedentary"), sub: t("actSedentarySub"), icon: <User02Icon size={20} /> },
                   ] as const
                 ).map((a) => (
                   <button
@@ -422,7 +422,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                     </div>
                     {activity === a.k && (
                       <div className="grid h-6 w-6 place-items-center rounded-full gradient-primary text-white">
-                        <Check size={16} />
+                        <CheckmarkSquare01Icon size={16} />
                       </div>
                     )}
                   </button>
@@ -444,7 +444,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
             className="flex-1 h-14 rounded-2xl gradient-primary text-white text-sm font-semibold shadow-button disabled:opacity-40 disabled:shadow-none flex items-center justify-center gap-2"
           >
             {step === TOTAL ? t("finish") : t("next")}
-            {step !== TOTAL && <ArrowRight size={16} />}
+            {step !== TOTAL && <ArrowRight01Icon size={16} />}
           </button>
         </div>
       </div>
@@ -510,7 +510,7 @@ function ChoiceCard({ active, onClick, icon, label, tint }: { active: boolean; o
       <div className="text-sm font-semibold text-text-primary">{label}</div>
       {active && (
         <div className="absolute top-3 right-3 grid h-6 w-6 place-items-center rounded-full gradient-primary text-white">
-          <Check size={16} />
+          <CheckmarkSquare01Icon size={16} />
         </div>
       )}
     </button>
@@ -553,7 +553,7 @@ function TrainingScreen() {
           <div className="space-y-2">
             {logs.map((m, i) => (
               <div key={i} className="flex items-center gap-2 animate-fade-in">
-                <Check className="h-4 w-4 text-success" />
+                <CheckmarkSquare01Icon className="h-4 w-4 text-success" />
                 <span className="text-sm text-text-secondary">{m}</span>
               </div>
             ))}
@@ -567,7 +567,7 @@ function TrainingScreen() {
         </div>
 
         <div className="mt-4 inline-flex items-center gap-2 text-xs text-text-muted">
-          <Activity className="h-3.5 w-3.5" />
+          <Activity01Icon className="h-3.5 w-3.5" />
           Google Gemini AI bilan quvvatlangan
         </div>
       </div>

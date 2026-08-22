@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Chart2 as ChartBar, Drop, Ruler } from "iconsax-react";
+import { Analytics01Icon, DropletIcon, RulerIcon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { bodyFatNavy } from "@/lib/fitasist/coach";
 import { t } from "@/lib/fitasist/translations";
@@ -53,7 +53,7 @@ export function StatsTab() {
               : "text-text-muted hover:text-text-primary"
           }`}
         >
-          <ChartBar size={14} variant="Bold" />
+          <Analytics01Icon size={14} />
           <span>{lang === "ru" ? "Аналитика" : lang === "en" ? "Analytics" : "Analitika"}</span>
         </button>
 
@@ -65,7 +65,7 @@ export function StatsTab() {
               : "text-text-muted hover:text-text-primary"
           }`}
         >
-          <Ruler size={14} variant="Bold" />
+          <RulerIcon size={14} />
           <span>{lang === "ru" ? "Замеры" : lang === "en" ? "Body" : "O'lchovlar"}</span>
         </button>
 
@@ -77,7 +77,7 @@ export function StatsTab() {
               : "text-text-muted hover:text-text-primary"
           }`}
         >
-          <Drop size={14} variant="Bold" />
+          <DropletIcon size={14} />
           <span>{lang === "ru" ? "Вода" : lang === "en" ? "Water" : "Suv"}</span>
         </button>
       </div>

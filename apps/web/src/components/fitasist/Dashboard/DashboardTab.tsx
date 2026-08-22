@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Edit2 } from "iconsax-react";
+import { PencilEdit02Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { useCalories } from "@/hooks/useCalories";
 import { useHydration } from "@/hooks/useHydration";
@@ -87,7 +87,7 @@ export function DashboardTab({ onOpenChat, onOpenCalorie, onOpenSettings, onOpen
             className="p-2 rounded-xl bg-secondary-bg text-text-muted hover:text-brand active-press transition-colors shrink-0"
             title="Maqsadni tahrirlash"
           >
-            <Edit2 size={16} variant="Bold" />
+            <PencilEdit02Icon size={16} />
           </button>
         </div>
       ) : (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Setting2 as GearSix, LogoutCurve as SignOut, Trash, ShieldTick as ShieldCheck, Edit2 as PencilSimple, Camera, Profile as User } from "iconsax-react";
+import { Settings01Icon, Logout01Icon, Delete02Icon, Shield01Icon, PencilEdit02Icon, Camera01Icon, User02Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { t } from "@/lib/fitasist/translations";
 import { Sheet } from "./common/ui";
@@ -43,7 +43,7 @@ export function SettingsSheet({ onClose, onAdminClick }: SettingsSheetProps) {
         {/* Admin access (admin only) */}
         {user?.email === "salimovsarvar21@gmail.com" && (
           <button onClick={onAdminClick} className="w-full h-12 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-500 text-xs font-bold flex items-center justify-center gap-2 border border-amber-500/20 transition-all active:scale-95 mb-1">
-            <ShieldCheck size={18} variant="Bold" /> FitAssist Admin
+            <Shield01Icon size={18} /> FitAssist Admin
           </button>
         )}
 
@@ -60,7 +60,7 @@ export function SettingsSheet({ onClose, onAdminClick }: SettingsSheetProps) {
               )}
             </div>
             <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <Camera size={20} className="text-white" variant="Bold" />
+              <Camera01Icon size={20} className="text-white" />
             </div>
             <input type="file" accept="image/*" onChange={handlePhotoUpload} className="sr-only" />
           </label>
@@ -119,12 +119,12 @@ export function SettingsSheet({ onClose, onAdminClick }: SettingsSheetProps) {
           onClick={async () => { await logout(); onClose(); }}
           className="w-full h-12 rounded-2xl bg-secondary-bg hover:bg-border text-text-primary text-sm font-semibold flex items-center justify-center gap-2 border border-border transition-all active:scale-95"
         >
-          <SignOut size={16} variant="Bold" className="text-text-secondary" /> {t("logout", lang)}
+          <Logout01Icon size={16} className="text-text-secondary" /> {t("logout", lang)}
         </button>
 
         {!confirmReset ? (
           <button onClick={() => setConfirmReset(true)} className="w-full h-12 rounded-2xl bg-destructive/10 text-destructive text-sm font-semibold flex items-center justify-center gap-2">
-            <Trash size={16} variant="Bold" /> {lang === "ru" ? "Удалить все данные" : lang === "en" ? "Reset all data" : "Barcha malumotlarni ochirish"}
+            <Delete02Icon size={16} /> {lang === "ru" ? "Удалить все данные" : lang === "en" ? "Reset all data" : "Barcha malumotlarni ochirish"}
           </button>
         ) : (
           <div className="rounded-2xl bg-destructive/10 border border-destructive/20 p-4">

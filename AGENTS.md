@@ -28,8 +28,8 @@ Kod hech qachon tasodifiy joyga yozilmaydi. Har bir o'zgarish o'zining qat'iy ma
 
 ## 3. 🎨 Dizayn va Ikonlar Standarti (Design Consistency)
 
-* **Yagona Ikon Kutubxonasi:** Loyihada faqat va faqat **`iconsax-react`** ishlatiladi. Boshqa kutubxonalarni import qilish **qat'iyan man etiladi**.
-* **Apple & Modern Glass Style:** Ikonlar variantida `variant="Bold"` yoki `variant="Bulk"` (faol holat uchun) va `variant="Linear"` (no-faol holat uchun) ishlatiladi.
+* **Yagona Ikon Kutubxonasi:** Loyihada faqat va faqat **`hugeicons-react`** ishlatiladi. Boshqa kutubxonalarni import qilish **qat'iyan man etiladi**.
+* **Apple & Modern Glass Style:** Ikonlar variantida `variant="solid"` yoki `variant="twotone"` (faol holat uchun) va `variant="stroke"` (no-faol holat uchun) ishlatiladi.
 * **Tailwind & Design Tokens:** Ranglar `styles.css` dagi CSS o'zgaruvchilar orqali olinadi (`brand`, `surface`, `secondary-bg`, `text-primary`, `text-muted`).
 
 ---

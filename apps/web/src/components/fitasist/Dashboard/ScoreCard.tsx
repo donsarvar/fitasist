@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ArrowUp2 } from "iconsax-react";
+import { ArrowUp01Icon } from "hugeicons-react";
 import type { Language } from "@/lib/fitasist/types";
 import { t } from "@/lib/fitasist/translations";
 import { Card } from "../common/ui";
@@ -68,7 +68,7 @@ export const ScoreCard = memo(function ScoreCard({
           {sub}
         </div>
         <div className="mt-1 text-[10px] font-semibold text-text-muted flex items-center justify-center gap-0.5">
-          <ArrowUp2 size={11} variant="Bold" className="text-success" />
+          <ArrowUp01Icon size={11} className="text-success" />
           <span>{t("pointsPlus", lang)}</span>
         </div>
       </div>

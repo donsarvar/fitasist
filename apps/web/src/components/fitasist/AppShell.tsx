@@ -1,16 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Home2 as House,
-  Chart2 as ChartBar,
-  Cup as Trophy,
-  Notification as Bell,
-  Moon,
-  Sun1 as Sun,
-  MessageText as ChatCircleText,
-  MedalStar as Medal,
-  Profile as User,
-  Setting2 as GearSix,
-} from "iconsax-react";
+import { Home01Icon, Analytics01Icon, RunningShoesIcon, Target02Icon, User02Icon, Moon02Icon, Sun01Icon, Notification01Icon, Comment01Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import type { AppNotification } from "@/lib/fitasist/types";
 import { t } from "@/lib/fitasist/translations";
@@ -103,11 +92,11 @@ export function AppShell() {
   })();
 
   const navItems = [
-    { k: "dashboard" as const, icon: House, label: t("home", lang) },
-    { k: "stats" as const, icon: ChartBar, label: t("stats", lang) },
-    { k: "marathons" as const, icon: Medal, label: lang === "ru" ? "Марафон" : lang === "en" ? "Races" : "Marafon" },
-    { k: "challenges" as const, icon: Trophy, label: t("goals", lang) },
-    { k: "profile" as const, icon: User, label: lang === "ru" ? "Профиль" : lang === "en" ? "Profile" : "Profil" },
+    { k: "dashboard" as const, icon: Home01Icon, label: t("home", lang) },
+    { k: "stats" as const, icon: Analytics01Icon, label: t("stats", lang) },
+    { k: "marathons" as const, icon: RunningShoesIcon, label: lang === "ru" ? "Марафон" : lang === "en" ? "Races" : "Marafon" },
+    { k: "challenges" as const, icon: Target02Icon, label: t("goals", lang) },
+    { k: "profile" as const, icon: User02Icon, label: lang === "ru" ? "Профиль" : lang === "en" ? "Profile" : "Profil" },
   ] as const;
 
   return (
@@ -124,13 +113,13 @@ export function AppShell() {
           </div>
           <div className="flex items-center gap-2">
             <IconBtn onClick={() => update({ theme: state.theme === "dark" ? "light" : "dark" })}>
-              {state.theme === "dark" ? <Sun size={17} variant="Bold" /> : <Moon size={17} variant="Bold" />}
+              {state.theme === "dark" ? <Sun01Icon size={18} /> : <Moon02Icon size={18} />}
             </IconBtn>
             <button
               onClick={() => setNotifOpen(true)}
               className="relative grid h-9 w-9 place-items-center rounded-full bg-white/90 dark:bg-surface-elevated/90 backdrop-blur-md shadow-ring border border-white/60 dark:border-white/10 text-text-secondary dark:text-text-primary active-press transition-all"
             >
-              <Bell size={16} variant="Bold" />
+              <Notification01Icon size={18} />
               {unread > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-destructive text-[9px] font-black text-white grid place-items-center animate-pulse tabular-nums">
                   {unread}
@@ -180,7 +169,7 @@ export function AppShell() {
                   {active && (
                     <span className="absolute inset-0 rounded-2xl gradient-primary shadow-button -z-0" />
                   )}
-                  <Icon size={17} variant={active ? "Bold" : "Linear"} className="relative z-10" />
+                  <Icon size={18} className="relative z-10" />
                   <span className="text-[9px] font-bold tracking-tight relative z-10">{item.label}</span>
                 </button>
               );
@@ -204,7 +193,7 @@ export function AppShell() {
             onClick={() => setCoachOpen(true)}
             className="fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-4 z-40 grid h-13 w-13 place-items-center rounded-full gradient-primary text-white shadow-hero active-press hover:scale-105 transition-all border border-white/30"
           >
-            <ChatCircleText size={22} variant="Bold" />
+            <Comment01Icon size={22} />
           </button>
         )}
 

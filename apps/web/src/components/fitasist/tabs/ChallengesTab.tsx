@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Cup as Trophy, Add as Plus, ArrowDown2 as CaretDown, Flash as Lightning, Drop, Ruler, DirectRight as Target, TickCircle as Check } from "iconsax-react";
+import { Target02Icon, Add01Icon, ArrowDown01Icon, FlashIcon, DropletIcon, RulerIcon, CheckmarkCircle01Icon, Dumbbell01Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { useChallenges } from "@/hooks/useChallenges";
 import type { Challenge } from "@/lib/fitasist/types";
@@ -35,7 +35,7 @@ export function ChallengesTab() {
 
       {mainChallenge ? <ActiveChallengeCard c={mainChallenge} onDo={() => handleDoToday(mainChallenge)} /> : (
         <Card className="mt-5 p-8 text-center">
-          <Trophy size={40} variant="Bold" className="mx-auto text-brand" />
+          <Target02Icon size={40} className="mx-auto text-brand" />
           <p className="mt-3 text-sm text-text-muted">
             {lang === "ru" ? "Активных целей нет. Создайте новую ниже!" : lang === "en" ? "No active goals. Create one below!" : "Faol maqsadlar yo'q. Quyida yangisini yarating!"}
           </p>
@@ -45,8 +45,8 @@ export function ChallengesTab() {
       <SectionTitle>{t("createNewGoal", lang)}</SectionTitle>
       <Card className="p-4">
         <button onClick={() => setShowForm(!showForm)} className="w-full flex items-center justify-between text-sm font-semibold text-text-primary">
-          <span className="flex items-center gap-2"><Plus size={16} variant="Bold" className="text-brand" /> {t("addNewGoal", lang)}</span>
-          <CaretDown size={16} variant="Bold" className={`text-text-muted transition-transform ${showForm ? "rotate-180" : ""}`} />
+          <span className="flex items-center gap-2"><Add01Icon size={16} className="text-brand" /> {t("addNewGoal", lang)}</span>
+          <ArrowDown01Icon size={16} className={`text-text-muted transition-transform ${showForm ? "rotate-180" : ""}`} />
         </button>
         {showForm && (
           <div className="mt-4 space-y-4 animate-fade-in">
@@ -56,10 +56,10 @@ export function ChallengesTab() {
               </span>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {[
-                  { icon: <Trophy size={14} variant="Bold" className="text-amber-500" />, name: { uz: "Planka mashqi", ru: "Планка", en: "Plank Exercise" }, duration: 30, dailyTarget: { uz: "2 daqiqa", ru: "2 минуты", en: "2 minutes" } },
-                  { icon: <Lightning size={14} variant="Bold" className="text-blue-500" />, name: { uz: "Otjimaniya (Push-up)", ru: "Отжимания", en: "Push-ups" }, duration: 30, dailyTarget: { uz: "50 marta", ru: "50 раз", en: "50 times" } },
-                  { icon: <Ruler size={14} variant="Bold" className="text-emerald-500" />, name: { uz: "Kunlik yugurish", ru: "Ежедневный бег", en: "Daily Running" }, duration: 30, dailyTarget: { uz: "3 km", ru: "3 км", en: "3 km" } },
-                  { icon: <Drop size={14} variant="Bold" className="text-sky-500" />, name: { uz: "Suv ichish odati", ru: "Питье воды", en: "Water Intake" }, duration: 21, dailyTarget: { uz: "2 litr", ru: "2 литра", en: "2 liters" } },
+                  { icon: <Target02Icon size={14} className="text-amber-500" />, name: { uz: "Planka mashqi", ru: "Планка", en: "Plank Exercise" }, duration: 30, dailyTarget: { uz: "2 daqiqa", ru: "2 минуты", en: "2 minutes" } },
+                  { icon: <FlashIcon size={14} className="text-blue-500" />, name: { uz: "Otjimaniya (Push-up)", ru: "Отжимания", en: "Push-ups" }, duration: 30, dailyTarget: { uz: "50 marta", ru: "50 раз", en: "50 times" } },
+                  { icon: <RulerIcon size={14} className="text-emerald-500" />, name: { uz: "Kunlik yugurish", ru: "Ежедневный бег", en: "Daily Running" }, duration: 30, dailyTarget: { uz: "3 km", ru: "3 км", en: "3 km" } },
+                  { icon: <DropletIcon size={14} className="text-sky-500" />, name: { uz: "Suv ichish odati", ru: "Питье воды", en: "Water Intake" }, duration: 21, dailyTarget: { uz: "2 litr", ru: "2 литра", en: "2 liters" } },
                 ].map((tpl, i) => (
                   <button
                     key={i}
@@ -116,7 +116,7 @@ export function ChallengesTab() {
                 <div className="text-[11px] text-text-muted mt-0.5">Yakunlandi: {fmtDate(c.startDate, lang)} • {c.duration} kun</div>
               </div>
               <div className="grid h-7 w-7 place-items-center rounded-full bg-emerald-500/15 text-emerald-500 shrink-0">
-                <Check size={16} />
+                <CheckmarkCircle01Icon size={16} />
               </div>
             </Card>
           ))}
@@ -178,9 +178,9 @@ function ActiveChallengeCard({ c, onDo }: { c: Challenge; onDo: () => void }) {
         className={`mt-5 w-full h-14 rounded-2xl text-sm font-extrabold shadow-button transition-all active:scale-95 flex items-center justify-center gap-2 relative z-10 ${todayDone ? "bg-emerald-500 text-white cursor-default opacity-90" : "bg-white text-brand hover:bg-white/95"}`}
       >
         {todayDone ? (
-          <><Check size={20} /><span>Bugun uchun bajarildi! ✅</span></>
+          <><CheckmarkCircle01Icon size={20} /><span>Bugun uchun bajarildi! ✅</span></>
         ) : (
-          <><Target className="h-5 w-5 text-brand" /><span>Bugun bajardim! 🎯</span></>
+          <><Target02Icon className="h-5 w-5 text-brand" /><span>Bugun bajardim! 🎯</span></>
         )}
       </button>
     </Card>

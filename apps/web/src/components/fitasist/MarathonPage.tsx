@@ -1,14 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-  Location as MapPin,
-  Calendar as CalendarDots,
-  Clock as Timer,
-  ExportCurve as ArrowSquareOut,
-  SearchNormal1 as MagnifyingGlass,
-  FilterSearch as Funnel,
-  MedalStar as Medal,
-  TickCircle as CheckCircle,
-} from "iconsax-react";
+import { Search01Icon, FilterIcon, Location01Icon, Calendar01Icon, Clock01Icon, Medal01Icon, SentIcon, CheckmarkCircle01Icon } from "hugeicons-react";
 
 // ─── Marathon Data ───────────────────────────────────────────────────────────
 
@@ -284,7 +275,7 @@ function MarathonItemCard({ m, lang }: { m: Marathon; lang: string }) {
     >
       {m.highlight && (
         <div className="absolute top-3 right-3 flex items-center gap-1 bg-brand text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
-          <Medal size={11} variant="Bold" />
+          <Medal01Icon size={11} />
           <span>{lang === "ru" ? "Топ" : lang === "en" ? "Top" : "Tavsiya"}</span>
         </div>
       )}
@@ -294,7 +285,7 @@ function MarathonItemCard({ m, lang }: { m: Marathon; lang: string }) {
         <div className="flex-1 min-w-0 pr-12">
           <h3 className="font-bold text-text-primary text-base leading-snug truncate">{name}</h3>
           <div className="flex items-center gap-1 text-xs text-text-muted mt-1">
-            <MapPin size={13} variant="Bold" className="text-brand shrink-0" />
+            <Location01Icon size={13} className="text-brand shrink-0" />
             <span>{m.city}, {m.country}</span>
           </div>
         </div>
@@ -302,14 +293,14 @@ function MarathonItemCard({ m, lang }: { m: Marathon; lang: string }) {
 
       <div className="mt-4 grid grid-cols-2 gap-2 bg-secondary-bg/60 dark:bg-white/5 rounded-2xl p-3">
         <div className="flex items-center gap-2">
-          <CalendarDots size={16} variant="Bold" className="text-brand shrink-0" />
+          <Calendar01Icon size={16} className="text-brand shrink-0" />
           <div>
             <div className="text-[10px] text-text-muted">{lang === "ru" ? "Дата" : lang === "en" ? "Date" : "Sana"}</div>
             <div className="text-xs font-semibold text-text-primary leading-tight">{formatDate(m.date, lang)}</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Timer size={16} variant="Bold" className="text-brand shrink-0" />
+          <Clock01Icon size={16} className="text-brand shrink-0" />
           <div>
             <div className="text-[10px] text-text-muted">{daysLeftText}</div>
             <div className={`text-xs font-bold leading-tight ${daysLeft <= 30 ? "text-amber-500" : "text-text-primary"}`}>
@@ -335,7 +326,7 @@ function MarathonItemCard({ m, lang }: { m: Marathon; lang: string }) {
           className="flex-1 h-10 rounded-xl gradient-primary text-white text-xs font-bold shadow-button flex items-center justify-center gap-1.5 active:scale-98 transition-all"
         >
           <span>{registerLabel}</span>
-          <ArrowSquareOut size={13} variant="Bold" />
+          <SentIcon size={13} />
         </a>
         <a
           href={m.website}
@@ -344,7 +335,7 @@ function MarathonItemCard({ m, lang }: { m: Marathon; lang: string }) {
           className="h-10 px-3 rounded-xl bg-secondary-bg hover:bg-border text-text-secondary text-xs font-bold flex items-center justify-center gap-1 border border-border transition-all active:scale-95"
           title="Rasmiy vebsayt"
         >
-          <ArrowSquareOut size={14} variant="Bold" />
+          <SentIcon size={14} />
         </a>
       </div>
     </div>
@@ -385,7 +376,7 @@ export function MarathonPage({ lang = "uz" }: { lang?: Language | string }) {
       </div>
 
       <div className="relative">
-        <MagnifyingGlass size={16} variant="Bold" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+        <Search01Icon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
         <input
           type="text"
           value={search}
@@ -419,7 +410,7 @@ export function MarathonPage({ lang = "uz" }: { lang?: Language | string }) {
             onlyUpcoming ? "text-brand" : "text-text-muted"
           }`}
         >
-          <CheckCircle size={14} variant={onlyUpcoming ? "Bold" : "Linear"} />
+          <CheckmarkCircle01Icon size={14} />
           <span>Faqat bo'lajaklar</span>
         </button>
       </div>

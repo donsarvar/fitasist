@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { MessageText as ChatCircleText, MagicStar as Sparkle } from "iconsax-react";
+import { Comment01Icon, SparklesIcon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { dailyAdvice } from "@/lib/fitasist/coach";
 import { t } from "@/lib/fitasist/translations";
@@ -26,7 +26,7 @@ export const AIHeroCard = memo(function AIHeroCard({ onOpenChat }: Props) {
           <div className="absolute inset-3.5 rounded-full bg-white/90 blur-sm" />
           <div className="absolute inset-0 rounded-full border border-white/40 animate-ai-ring" />
           <div className="absolute inset-0 grid place-items-center text-white/90">
-            <Sparkle size={18} variant="Bold" />
+            <SparklesIcon size={18} />
           </div>
         </div>
 
@@ -45,7 +45,7 @@ export const AIHeroCard = memo(function AIHeroCard({ onOpenChat }: Props) {
         onClick={onOpenChat}
         className="relative w-full h-11 rounded-2xl bg-white text-brand text-xs font-bold shadow-button flex items-center justify-center gap-2 hover:bg-white/95 active-press transition-all select-none"
       >
-        <ChatCircleText size={16} variant="Bold" className="text-brand" />
+        <Comment01Icon size={16} className="text-brand" />
         <span>{t("talkToCoach", p?.language)}</span>
       </button>
     </div>

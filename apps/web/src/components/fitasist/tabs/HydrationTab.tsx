@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Danger as Warning } from "iconsax-react";
+import { Alert01Icon } from "hugeicons-react";
 import { useFit } from "@/lib/fitasist/store";
 import { useHydration } from "@/hooks/useHydration";
 import { t } from "@/lib/fitasist/translations";
@@ -142,7 +142,7 @@ export function HydrationTab() {
       {creatineWarning && (
         <div className="mt-5 rounded-3xl bg-warning/10 border border-warning/30 p-4 shadow-soft flex gap-3 animate-fade-in">
           <div className="grid h-10 w-10 place-items-center rounded-2xl bg-warning text-white shrink-0 shadow-soft">
-            <Warning size={20} variant="Bold" />
+            <Alert01Icon size={20} />
           </div>
           <p className="text-xs leading-relaxed text-warning-foreground dark:text-warning font-medium">
             {lang === "ru" ? (

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CloseCircle } from "iconsax-react";
+import { CancelCircleIcon } from "hugeicons-react";
 
 // ─── IconBtn ────────────────────────────────────────────────────────────────
 export function IconBtn({
@@ -219,7 +219,7 @@ export function Sheet({
                 onClick={onClose}
                 className="grid h-9 w-9 place-items-center rounded-full bg-white dark:bg-surface-elevated text-text-secondary dark:text-text-primary shadow-ring border border-white/60 dark:border-white/10 hover:opacity-80 active-press transition-all"
               >
-                <CloseCircle size={18} variant="Linear" />
+                <CancelCircleIcon size={18} />
               </button>
             </div>
           </div>
